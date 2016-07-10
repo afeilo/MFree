@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">OpenMusicPlayer</string>
+
+    <string name="song">歌曲</string>
+    <string name="album">专辑</string>
+    <string name="artist">艺术家</string>
 </resources>

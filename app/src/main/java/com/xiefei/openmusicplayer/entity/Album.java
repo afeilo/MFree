@@ -9,13 +9,14 @@ public class Album {
     private String minyear;
     private String artist;
     private long artistId;
-
-    public Album(long id, String album, String minyear, String artist, long artistId) {
+    private int numSongs;
+    public Album(long id, String album, String minyear, String artist, long artistId,int numSongs) {
         this.id = id;
         this.album = album;
         this.minyear = minyear;
         this.artist = artist;
         this.artistId = artistId;
+        this.numSongs = numSongs;
     }
 
     public long getId() {
@@ -56,6 +57,14 @@ public class Album {
 
     public void setArtist(String artist) {
         this.artist = artist;
+    }
+
+    public int getNumSongs() {
+        return numSongs;
+    }
+
+    public void setNumSongs(int numSongs) {
+        this.numSongs = numSongs;
     }
 
     @Override

@@ -64,13 +64,13 @@ public class AlbumLoader {
 
     @NonNull
     protected Album getAlbumInfo(Cursor cursor) {
-        return new Album(cursor.getLong(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getLong(4));
+        return new Album(cursor.getLong(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getLong(4),cursor.getInt(5));
     }
 
     protected Cursor getCursor(String selection, String[] selectionArgs){
         Cursor cursor = context.getContentResolver().query
                 (MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI
-                        ,new String[]{"_id","album","minyear","artist","artist_id"}
+                        ,new String[]{"_id","album","minyear","artist","artist_id","numsongs"}
                         ,selection,selectionArgs,MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
         return cursor;
     }
