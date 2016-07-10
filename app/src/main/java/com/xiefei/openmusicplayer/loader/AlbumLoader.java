@@ -1,7 +1,9 @@
 package com.xiefei.openmusicplayer.loader;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 
@@ -74,4 +76,5 @@ public class AlbumLoader {
                         ,selection,selectionArgs,MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
         return cursor;
     }
+
 }

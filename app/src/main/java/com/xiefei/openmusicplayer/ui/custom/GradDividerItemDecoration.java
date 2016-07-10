@@ -28,14 +28,22 @@ public class GradDividerItemDecoration extends RecyclerView.ItemDecoration{
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+        int left = 0,top = 0,right = 0,bottom = 0;
+        if(parent.getChildLayoutPosition(view)<horizontalCount)
+            top = divideHeight;
         if(parent.getChildLayoutPosition(view)%horizontalCount == 0){
-            outRect.set(0,0,divideHeight/2,divideHeight);
-        }else if(parent.getChildLayoutPosition(view)%horizontalCount == divideHeight-1){
-            outRect.set(divideHeight/2,0,0,divideHeight);
+            left = divideHeight;
+            right = divideHeight/2;
+            bottom = divideHeight;
+        }else if(parent.getChildLayoutPosition(view)%horizontalCount == horizontalCount-1){
+            left = divideHeight/2;
+            right = divideHeight;
+            bottom = divideHeight;
         }else {
-            outRect.set(divideHeight/2,0,divideHeight/2,divideHeight);
+            left = divideHeight /2;
+            right = divideHeight /2;
+            bottom = divideHeight;
         }
-
-
+        outRect.set(left,top,right,bottom);
     }
 }

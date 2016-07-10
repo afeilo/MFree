@@ -12,11 +12,12 @@ public class SongInfo implements Serializable {
     private String artist;//歌手
     private long duration;//播放时间
     private String url;//地址
-
-    public SongInfo(long id, String title, String album, String artist, long duration, String url) {
+    private long albumId;//专辑id
+    public SongInfo(long id, String title, String album,long albumId,String artist, long duration, String url) {
         this.id = id;
         this.title = title;
         this.album = album;
+        this.albumId = albumId;
         this.artist = artist;
         this.duration = duration;
         this.url = url;
@@ -78,6 +79,18 @@ public class SongInfo implements Serializable {
         this.artist = artist;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(long albumId) {
+        this.albumId = albumId;
+    }
+
     @Override
     public String toString() {
         return "SongInfo{" +
@@ -89,6 +102,7 @@ public class SongInfo implements Serializable {
                 ", url='" + url + '\'' +
                 '}';
     }
+
 
     @Override
     public boolean equals(Object o) {

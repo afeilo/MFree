@@ -68,9 +68,10 @@ public class SongLoader {
         String title = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
         String artist = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
         String album = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
+        long albumId = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
         int duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
         String url = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
-        return new SongInfo(id, title , album, artist, duration, url);
+        return new SongInfo(id, title , album, albumId, artist, duration, url);
     }
 
     private Cursor getCursor(String selection,String[] selectionArgs){
@@ -81,7 +82,8 @@ public class SongLoader {
                 (MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
                         ,new String[]{MediaStore.Audio.Media._ID,MediaStore.Audio.Media.TITLE,
                                 MediaStore.Audio.Media.ARTIST,MediaStore.Audio.Media.ALBUM,
-                                MediaStore.Audio.Media.DURATION,MediaStore.Audio.Media.DATA},
+                                MediaStore.Audio.Media.DURATION,MediaStore.Audio.Media.DATA,
+                                MediaStore.Audio.Media.ALBUM_ID},
                         sectionParam,selectionArgs,MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
         return cursor;
     }

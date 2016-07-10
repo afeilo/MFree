@@ -4,6 +4,7 @@ package com.xiefei.openmusicplayer.utils;
  * Created by xiefei-pc on 2016/1/27.
  */
 public class Constant {
+    public static String ONLINE_BASE_URL="http://tingapi.ting.baidu.com";
     public static final String CHOOSE_FLAG="flag";//传递数据时标明获取的key
     public static final String TYPE = "choose_type";//传递的数据属于哪个类型（根据标记获取音乐列表）
     public static final int FILE_TYPE = 1;

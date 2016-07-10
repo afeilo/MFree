@@ -13,6 +13,7 @@
         <com.xiefei.openmusicplayer.ui.custom.SquareImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="fitCenter"
             android:id="@+id/image"
             />
         <TextView
@@ -20,6 +21,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/primary_title"
             android:textColor="@android:color/primary_text_light"
+            android:layout_marginTop="@dimen/activity_vertical_margin_small"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin_small"
+            android:maxLines="1"
             android:textSize="@dimen/standard_text_large"
             />
         <TextView
@@ -27,6 +31,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/secondary_title"
             android:textSize="@dimen/standard_text_small"
+            android:layout_marginBottom="@dimen/activity_vertical_margin_small"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin_small"
+            android:maxLines="1"
             android:textColor="@android:color/secondary_text_light"
             />
     </LinearLayout>
