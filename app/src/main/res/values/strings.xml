@@ -5,4 +5,7 @@
     <string name="album">专辑</string>
     <string name="artist">艺术家</string>
     <string name="online_song_menu">在线歌单</string>
+    <string name="drawer_open">open_draw</string>
+    <string name="drawer_close">close_drawer</string>
+    <string name="local_song_lib">本地乐库</string>
 </resources>

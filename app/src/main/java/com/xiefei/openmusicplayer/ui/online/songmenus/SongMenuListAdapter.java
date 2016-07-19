@@ -27,6 +27,7 @@ public class SongMenuListAdapter extends RecyclerView.Adapter<SongMenuListAdapte
     public SongMenuListAdapter(Context context) {
         this.context = context;
     }
+    private OnItemClickListener onItemClickListener;
 
     public void addSongMenus(List<SongMenu.ContentBean> data) {
         SongMenus.addAll(data);
@@ -38,8 +39,16 @@ public class SongMenuListAdapter extends RecyclerView.Adapter<SongMenuListAdapte
     }
 
     @Override
-    public void onBindViewHolder(SongMenuListViewHolder holder, int position) {
+    public void onBindViewHolder(final SongMenuListViewHolder holder, final int position) {
         SongMenu.ContentBean songMenu = SongMenus.get(position);
+        if(onItemClickListener!=null){
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onItemClickListener.onItemClick(holder.itemView,position);
+                }
+            });
+        }
 //        holder.songTitle.setText(songInfo.getTitle());
 //        holder.songSongMenu.setText(songInfo.getSongMenu());
 //        holder.primaryTitle.setText(SongMenu.getAstist());
@@ -55,7 +64,12 @@ public class SongMenuListAdapter extends RecyclerView.Adapter<SongMenuListAdapte
         return SongMenus.size();
     }
 
-
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+    public SongMenu.ContentBean getData(int position){
+        return SongMenus.get(position);
+    }
 
     static class SongMenuListViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.primary_title)
@@ -70,4 +84,8 @@ public class SongMenuListAdapter extends RecyclerView.Adapter<SongMenuListAdapte
         }
 
     }
+    public interface OnItemClickListener{
+        void onItemClick(View view,int position);
+    }
 }
+

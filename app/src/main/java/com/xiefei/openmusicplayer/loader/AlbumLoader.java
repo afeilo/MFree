@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.content.CursorLoader;
 
 import com.xiefei.openmusicplayer.entity.Album;
 import com.xiefei.openmusicplayer.entity.Album;
@@ -18,7 +19,7 @@ import java.util.List;
  * Created by xiefei on 16/6/29.
  * 获取所有专辑 从ContentProvider中获取,所以一旦有新增加的歌曲操作需要我们进行更新.
  */
-public class AlbumLoader {
+public class AlbumLoader{
     private static AlbumLoader albumLoader = null;
     private Context context = null;
     ArrayList arrayList = null;
@@ -76,5 +77,4 @@ public class AlbumLoader {
                         ,selection,selectionArgs,MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
         return cursor;
     }
-
 }

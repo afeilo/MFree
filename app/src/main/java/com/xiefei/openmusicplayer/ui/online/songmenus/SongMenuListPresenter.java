@@ -30,6 +30,8 @@ public class SongMenuListPresenter extends MvpBasePresenter<SongMenuListView> {
     void getData(int pageSize, final int pageNo){
         if(pageNo == 1){
             getView().showLoading(true);
+        }else {
+            getView().showLoading(false);
         }
         Call<SongMenu> songMenuCall = songMenuLoader.getSongMenus(pageSize,pageNo);
         songMenuCall.enqueue(new Callback<SongMenu>() {

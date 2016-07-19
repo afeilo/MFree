@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,6 +17,9 @@ public class FragmentControl {
     private FragmentManager manager;
     private String lastTag;
     private String tag = "fragmentControlTag";
+    private String FRAGMENT_SHOWING="fragmentShowing";
+    private String FRAGMENT_TAGS = "fragmentControlId";
+    private ArrayList<String> tags = new ArrayList();
     public FragmentControl(FragmentManager manager){
         this.manager = manager;
     }
@@ -32,7 +36,9 @@ public class FragmentControl {
         }else {
         try {
             fragment = (Fragment) clazz.newInstance();
+            fragment.setRetainInstance(true);
             transaction.add(id,fragment,clazz.getName());
+            tags.add(clazz.getName());
             if(lastTag!=null)
                 transaction.hide(manager.findFragmentByTag(lastTag));
         } catch (InstantiationException e) {
@@ -48,10 +54,12 @@ public class FragmentControl {
         return true;
     }
     public void onSaveInstanceState(Bundle out){
-        out.putString(tag,lastTag);
+        out.putStringArrayList(FRAGMENT_TAGS,tags);
+        out.putString(FRAGMENT_SHOWING,lastTag);
     }
     public void onRestoreInstanceState(Bundle saveInstance){
-        lastTag = saveInstance.getString(tag);
+        lastTag = saveInstance.getString(FRAGMENT_SHOWING);
+        tags = saveInstance.getStringArrayList(FRAGMENT_TAGS);
         restore();
     }
 
@@ -60,7 +68,8 @@ public class FragmentControl {
         FragmentTransaction transaction = manager.beginTransaction();
         if(list!=null){
             for (Fragment fragment:list) {
-                transaction.hide(fragment);
+                if(tags.contains(fragment.getClass().getName()))
+                    transaction.hide(fragment);
             }
         }
         if(lastTag!=null)

@@ -9,10 +9,12 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
+import com.example.xiefei.openmusicplayer.IMediaPlaybackService;
 import com.xiefei.openmusicplayer.detail.SongDetailAty;
 import com.xiefei.openmusicplayer.entity.SongInfo;
 import com.xiefei.openmusicplayer.utils.Constant;
@@ -32,396 +34,324 @@ import java.util.Random;
  * 3.初始化 相当于CD播放器内内置了一张CD光盘（默认是上一次关闭播放器时的播放列表）
  * 4.记录播放列表
  */
-public class MusicService extends Service implements MediaPlayer.OnCompletionListener,MediaPlayer.OnErrorListener,MusicPlayer
-{
-    private static String Tag = "MusicService";
-    private MediaPlayer mediaPlayer;
-    private ArrayList<SongInfo> infos;
-    private ArrayList<MusicListener> listeners = new ArrayList<>();
-    private ArrayList<SongInfo> collectMusic;
-    private int currentPosition = -1;
-    private SongInfo currentMusic = null;
-//    private TimerThread thread = new TimerThread();
-    private boolean isPlaying = false;
-    private SharedPreferences preferences;
-    private int type;
-    private String chooseFlag;
-    private int repeatMode;
-    private boolean isOnline = false;
-    private Random random = new Random();
-    private int ONGOING_NOTIFICATION_ID = 100;
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        preferences = getSharedPreferences(Constant.SHARES_NAME, MODE_PRIVATE);
-        type = preferences.getInt(Constant.TYPE, Constant.ALL_TYPE);
-        currentPosition = preferences.getInt(Constant.SAVE_POSITION, 0);
-        chooseFlag = preferences.getString(Constant.CHOOSE_FLAG, "null");
-        repeatMode = preferences.getInt(Constant.REPEAT_MODE, Constant.STATE_LOOP);
-        getMusic(type, chooseFlag);
-//        collectMusic = MusicUtil.getInstance(this).getMusicGroupByType(Constant.SONG_MENU_TYPE).get("我的收藏");
-        if(infos.size()<=currentPosition){
-            getMusic(Constant.ALL_TYPE,null);
-        }
-        currentMusic = infos.get(currentPosition);
-        initNotification();
-    }
+public class MusicService extends Service implements MusicPlayer{
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        return START_NOT_STICKY;
-    }
-
-    public void setListener(MusicListener listener){
-        if(!listeners.contains(listener))
-            listeners.add(listener);
-    }
-    public void removeListener(MusicListener listener){
-        if(listener!=null&&listeners.contains(listener))
-            listeners.remove(listener);
-    }
-
-    @Override
-    public void onCompletion(MediaPlayer mp) {
-        playNext();
-    }
-
-    @Override
-    public boolean onError(MediaPlayer mp, int what, int extra) {
-        Log.d(Tag, "发生错误了");
-        return false;
-    }
-    public class MusicBinder extends Binder {
-        public MusicPlayer getMusicPlayer(){
-            return MusicService.this;
-        }
-    }
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return new MusicBinder();
-    }
-    @Override
-    public void seekTo(long time){
-//        play(currentPosition, (int) (progress*(infos.get(currentPosition).getDuration())/10000));
-            if(mediaPlayer==null)
-//                start(currentPosition, (int) (time));
-                start(null);
-            else {
-                mediaPlayer.seekTo((int) (time));
-            }
-//            thread.setNowSec((int) (time));
-    }
-    public SongInfo getCurrentMusicInfo(){
-        return currentMusic;
+        return null;
     }
 
     @Override
-    public void setPlayList(int type, String tag) {
-        if(this.type == type&&chooseFlag==null&&tag==null){
-            return;
-        } else if(this.type!=type||!chooseFlag.equals(tag)){
-            getMusic(type,tag);
-        }
-    }
-    private void getMusic(int type, String tag){
-        Log.d(Tag,"getMusic");
-        this.type = type;
-        chooseFlag = tag;
-//        infos = MusicUtil.getInstance(this).getMusicByType(type);
-//        if(infos == null){
-//            infos = MusicUtil.getInstance(this).getMusicGroupByType(type).get(tag);
-//        }
-    }
-//    @Override
-//    public boolean collectMusic() {
-//        boolean isCollect = false;
-//        if (!isOnline){
-//            isCollect = collectMusic.contains(infos.get(currentPosition));
-//        if(isCollect){
-//            collectMusic.remove(infos.get(currentPosition));
-//        }else {
-//            collectMusic.add(infos.get(currentPosition));
-//        }
-//        isCollect = isCollect?false:true;
-////        MusicUtil.getInstance(this).saveSongMenu();
-//        }
-//        return isCollect;
-//    }
-//
-//    @Override
-//    public boolean collectMusic(int type, String tag, int position) {
-//        ArrayList<SongInfo> musicInfos;
-//        if(this.type == type&&chooseFlag==null&&tag==null){
-//            musicInfos = infos;
-//        } else if(this.type!=type||!chooseFlag.equals(tag)){
-//            musicInfos = MusicUtil.getInstance(this).getMusicByType(type);
-//            if(musicInfos == null){
-//                musicInfos = MusicUtil.getInstance(this).getMusicGroupByType(type).get(tag);
-//            }
-//        }else {
-//            musicInfos = infos;
-//        }
-//        Log.d(Tag, "currentMusic->" + musicInfos.get(position));
-//        if(!collectMusic.contains(musicInfos.get(position))){
-//            Log.d(Tag,"add->"+musicInfos.get(position));
-//            collectMusic.add(musicInfos.get(position));
-//            MusicUtil.getInstance(this).saveCollect();
-//        }
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean isCollect() {
-//        return collectMusic.contains(currentMusic);
-//    }
+    public void openFile(String path) {
 
-    @Override
-    public void playNext() {
-//            if(repeatMode==Constant.STATE_LOOP){
-//                start(currentPosition==infos.size()-1?0:currentPosition+1, 0);
-//            }else if(repeatMode==Constant.STATE_LOOP_ONE){
-//                start(currentPosition, 0);
-//            }else if(repeatMode==Constant.STATE_ORDER){
-//                if(currentPosition!=infos.size()-1){
-//                    start(currentPosition + 1, 0);
-//                }else{
-//                    start(currentPosition, 0);
-//                }
-//            }else {
-//                int nextPosition = random.nextInt(infos.size());
-//                start(nextPosition, 0);
-//            }
     }
 
     @Override
-    public void playLast() {
-//            if(repeatMode==Constant.STATE_LOOP){
-//                start(currentPosition==0?currentPosition-1+infos.size():currentPosition-1, 0);
-//            }else if(repeatMode==Constant.STATE_LOOP_ONE){
-//                start(currentPosition, 0);
-//            }else if(repeatMode==Constant.STATE_ORDER){
-//                if(currentPosition!=0){
-//                    start(currentPosition - 1, 0);
-//                }else{
-//                    start(currentPosition, 0);
-//                }
-//            }else {
-//                int nextPosition = random.nextInt(infos.size());
-//                start(nextPosition,0);
-//            }
-    }
+    public void open(long[] list, int position) {
 
-//    @Override
-//    public void start(int item, int seekSec) {
-//        isOnline = false;
-//        if(type != Constant.LOAD_HISTORY){
-//            MusicUtil.getInstance(this).addHistory(infos.get(item));
-//        }
-//            currentPosition = item;
-//        if(infos.size()<currentPosition){
-//            getMusic(Constant.ALL_TYPE,null);
-//        }
-//            if(mediaPlayer==null){
-//                mediaPlayer = new MediaPlayer();
-//                mediaPlayer.setOnCompletionListener(this);
-//            }
-//            if(infos!=null){
-//                try {
-//                    isPlaying = true;
-//                    mediaPlayer.reset();
-//                    mediaPlayer.setDataSource(this, Uri.parse(infos.get(item).getUrl()));
-////                mediaPlayer.setDataSource(this, Uri.parse("/storage/emulated/0/Music/周深-好想你【男声合唱】.mp3"));
-//                    mediaPlayer.prepare();
-//                    mediaPlayer.seekTo(seekSec);
-//                    mediaPlayer.start();
-//                    thread.reset();
-//                    thread.setNowSec((int) (seekSec * (infos.get(currentPosition).getDuration()) / 10000));
-//                    currentMusic = infos.get(currentPosition);
-//                    currentMusic.setDuration(mediaPlayer.getDuration());
-//                    for (MusicListener listener:listeners) {
-//                        listener.playStart(currentMusic);
-//                    }
-//                    if(!thread.isAlive()){
-//                        thread.start();
-//                    }
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//            saveState();
-//    }
-
-    @Override
-    public void start(SongInfo songInfo) {
-        currentMusic = songInfo;
-        for (MusicListener listener:listeners) {
-            listener.playStart();
-        }
-        if(isOnline){
-            isPlaying = true;
-            mediaPlayer.start();
-            return;
-        }
-//        thread.reset();
-//        if(!thread.isAlive()){
-//            thread.start();
-//        }
-        if(mediaPlayer==null){
-            mediaPlayer = new MediaPlayer();
-            mediaPlayer.setOnCompletionListener(this);
-        }
-            try {
-                mediaPlayer.reset();
-                mediaPlayer.setDataSource(this, Uri.parse(songInfo.getUrl()));
-//                mediaPlayer.setDataSource(this, Uri.parse("/storage/emulated/0/Music/周深-好想你【男声合唱】.mp3"));
-                mediaPlayer.prepare();
-                mediaPlayer.start();
-                currentMusic.setDuration(mediaPlayer.getDuration());
-//                thread.reset();
-                isPlaying = true;
-                isOnline = true;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
     }
 
     @Override
-    public void pause(){
-        isPlaying = false;
-        mediaPlayer.pause();
-//        thread.setIsPause(true);
-        for (MusicListener listener:listeners) {
-            listener.playPause(mediaPlayer.getCurrentPosition());
-        }
+    public int getQueuePosition() {
+        return 0;
     }
 
     @Override
-    public int changeMode() {
-        repeatMode = (repeatMode+1)%4;
-        setRepeatMode(repeatMode);
-        return repeatMode;
+    public boolean isPlaying() {
+        return false;
+    }
+
+    @Override
+    public void stop() {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void play() {
+
+    }
+
+    @Override
+    public void prev() {
+
+    }
+
+    @Override
+    public void next() {
+
+    }
+
+    @Override
+    public long duration() {
+        return 0;
+    }
+
+    @Override
+    public long position() {
+        return 0;
+    }
+
+    @Override
+    public long seek(long pos) {
+        return 0;
+    }
+
+    @Override
+    public String getTrackName() {
+        return null;
+    }
+
+    @Override
+    public String getAlbumName() {
+        return null;
+    }
+
+    @Override
+    public long getAlbumId() {
+        return 0;
+    }
+
+    @Override
+    public String getArtistName() {
+        return null;
+    }
+
+    @Override
+    public long getArtistId() {
+        return 0;
+    }
+
+    @Override
+    public void enqueue(long[] list, int action) {
+
+    }
+
+    @Override
+    public long[] getQueue() {
+        return new long[0];
+    }
+
+    @Override
+    public void moveQueueItem(int from, int to) {
+
+    }
+
+    @Override
+    public void setQueuePosition(int index) {
+
+    }
+
+    @Override
+    public String getPath() {
+        return null;
+    }
+
+    @Override
+    public long getAudioId() {
+        return 0;
+    }
+
+    @Override
+    public void setShuffleMode(int shufflemode) {
+
+    }
+
+    @Override
+    public int getShuffleMode() {
+        return 0;
+    }
+
+    @Override
+    public int removeTracks(int first, int last) {
+        return 0;
+    }
+
+    @Override
+    public int removeTrack(long id) {
+        return 0;
+    }
+
+    @Override
+    public void setRepeatMode(int repeatmode) {
+
     }
 
     @Override
     public int getRepeatMode() {
-        return repeatMode;
+        return 0;
     }
-
-    public void goon(){
-        if(isOnline){
-            mediaPlayer.start();
-            start(currentMusic);
-//            for (MusicListener listener:listeners) {
-//                listener.playStart(currentMusic);
-//            }
-//            isPlaying = true;
-            return;
-        }
-        if(infos!=null&&infos.size()!=0){
-            isPlaying = true;
-            if(mediaPlayer==null){
-//                start();
-                return;
-            }
-            for (MusicListener listener:listeners) {
-                listener.playGoon();
-            }
-            mediaPlayer.start();
-//            thread.setIsPause(false);
-        }
-    }
-    public boolean isPlaying(){
-        return isPlaying;
-    }
-
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        stopForeground(true);
-//        pause();
-        saveState();
-        if(mediaPlayer!=null){
-            mediaPlayer.release();
-            mediaPlayer = null;
+    public int getMediaMountedCount() {
+        return 0;
+    }
+
+    @Override
+    public int getAudioSessionId() {
+        return 0;
+    }
+    //继承IMediaPlaybackService.Stub
+    public static class ServiceStub extends IMediaPlaybackService.Stub{
+
+        @Override
+        public void openFile(String path) throws RemoteException {
+
         }
-    }
-    Handler handler = new Handler();//主要用来主线程通信的
-    //新线程 用来更新进度。
-//    class TimerThread extends Thread {
-//        long nowSec = 0;
-//        long sec = 0;
-//        boolean isPause = false;
-//        @Override
-//        public void run() {
-//            while (true){
-//                try {
-//                    Thread.sleep(200);
-//                    if(!isPause){
-//                        nowSec+=200;
-//                        for (final MusicListener listener:listeners) {
-//                            handler.post(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    listener.playProgress((int) (nowSec * 10000/sec));
-//                                }
-//                            });
-//                        }
-//                    }
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//
-//        public void setIsPause(boolean isPause) {
-//            this.isPause = isPause;
-//        }
-//
-//        public void reset(){
-//            nowSec = 0;
-//            sec = currentMusic.getDuration();
-//        }
-//        public void setNowSec(long sec){
-//            nowSec = sec;
-//        }
-//    }
-    private void saveState(){
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(Constant.TYPE,type);
-        editor.putInt(Constant.SAVE_POSITION,currentPosition);
-        editor.putString(Constant.CHOOSE_FLAG, chooseFlag);
-        editor.commit();
-    }
 
-    public void setRepeatMode(int repeatMode) {
-        this.repeatMode = repeatMode;
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(Constant.REPEAT_MODE,repeatMode);
-        editor.commit();
-    }
-    private void initNotification(){
-        Intent notificationIntent = new Intent(this,SongDetailAty.class);
-        PendingIntent intent = PendingIntent.getActivity(this,0,notificationIntent,0);
-        Intent resultIntent = new Intent(this, SongDetailAty.class);
+        @Override
+        public void open(long[] list, int position) throws RemoteException {
 
-// The stack builder object will contain an artificial back stack for the
-// started Activity.
-// This ensures that navigating backward from the Activity leads out of
-// your application to the Home screen.
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-// Adds the back stack for the Intent (but not the Intent itself)
-        stackBuilder.addParentStack(SongDetailAty.class);
-// Adds the Intent that starts the Activity to the top of the stack
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-//        Notification notification = new NotificationCompat.Builder(MusicService.this).setContentIntent(resultPendingIntent).setContentInfo("123").setContentTitle("345").setContent(new RemoteViews(getPackageName(), R.layout.player_bar)).getNotification();
-//        startForeground(ONGOING_NOTIFICATION_ID,notification);
-//        NotificationManagerCompat.from(this).notify(ONGOING_NOTIFICATION_ID,notification);
+        }
+
+        @Override
+        public int getQueuePosition() throws RemoteException {
+            return 0;
+        }
+
+        @Override
+        public boolean isPlaying() throws RemoteException {
+            return false;
+        }
+
+        @Override
+        public void stop() throws RemoteException {
+
+        }
+
+        @Override
+        public void pause() throws RemoteException {
+
+        }
+
+        @Override
+        public void play() throws RemoteException {
+
+        }
+
+        @Override
+        public void prev() throws RemoteException {
+
+        }
+
+        @Override
+        public void next() throws RemoteException {
+
+        }
+
+        @Override
+        public long duration() throws RemoteException {
+            return 0;
+        }
+
+        @Override
+        public long position() throws RemoteException {
+            return 0;
+        }
+
+        @Override
+        public long seek(long pos) throws RemoteException {
+            return 0;
+        }
+
+        @Override
+        public String getTrackName() throws RemoteException {
+            return null;
+        }
+
+        @Override
+        public String getAlbumName() throws RemoteException {
+            return null;
+        }
+
+        @Override
+        public long getAlbumId() throws RemoteException {
+            return 0;
+        }
+
+        @Override
+        public String getArtistName() throws RemoteException {
+            return null;
+        }
+
+        @Override
+        public long getArtistId() throws RemoteException {
+            return 0;
+        }
+
+        @Override
+        public void enqueue(long[] list, int action) throws RemoteException {
+
+        }
+
+        @Override
+        public long[] getQueue() throws RemoteException {
+            return new long[0];
+        }
+
+        @Override
+        public void moveQueueItem(int from, int to) throws RemoteException {
+
+        }
+
+        @Override
+        public void setQueuePosition(int index) throws RemoteException {
+
+        }
+
+        @Override
+        public String getPath() throws RemoteException {
+            return null;
+        }
+
+        @Override
+        public long getAudioId() throws RemoteException {
+            return 0;
+        }
+
+        @Override
+        public void setShuffleMode(int shufflemode) throws RemoteException {
+
+        }
+
+        @Override
+        public int getShuffleMode() throws RemoteException {
+            return 0;
+        }
+
+        @Override
+        public int removeTracks(int first, int last) throws RemoteException {
+            return 0;
+        }
+
+        @Override
+        public int removeTrack(long id) throws RemoteException {
+            return 0;
+        }
+
+        @Override
+        public void setRepeatMode(int repeatmode) throws RemoteException {
+
+        }
+
+        @Override
+        public int getRepeatMode() throws RemoteException {
+            return 0;
+        }
+
+        @Override
+        public int getMediaMountedCount() throws RemoteException {
+            return 0;
+        }
+
+        @Override
+        public int getAudioSessionId() throws RemoteException {
+            return 0;
+        }
     }
 }

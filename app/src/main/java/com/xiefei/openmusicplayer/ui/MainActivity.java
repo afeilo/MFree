@@ -9,6 +9,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -23,9 +24,9 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     @BindView(R.id.navigation_view)
-    NavigationView navigationView;
+    public NavigationView navigationView;
     @BindView(R.id.drawer_layout)
-    DrawerLayout drawerLayout;
+    public DrawerLayout drawerLayout;
     private static final int PERMISSION_REQUEST_CODE = 0;
     private FragmentControl fragmentControl;
     @Override
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         fragmentControl = new FragmentControl(getSupportFragmentManager());
-        if(Build.VERSION.SDK_INT>Build.VERSION_CODES.M){
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
             checkPermission();
         }else {
             load();
@@ -78,5 +79,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        fragmentControl.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        fragmentControl.onRestoreInstanceState(savedInstanceState);
     }
 }

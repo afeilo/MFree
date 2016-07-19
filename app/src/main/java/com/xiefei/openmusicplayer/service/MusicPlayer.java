@@ -7,27 +7,35 @@ import com.xiefei.openmusicplayer.entity.SongInfo;
  * Created by xiefei on 2016/3/13.
  */
 public interface MusicPlayer {
-    void setPlayList(int type, String tag);
-//    boolean collectMusic();
-//    boolean collectMusic(int type, String tag, int position);
-//    boolean isCollect();
-    void playNext();
-    void playLast();
-//    void start(int item, int seekSec);
-    void start(SongInfo songInfo);
-    void pause();
-    void goon();
-    int changeMode();
-    int getRepeatMode();
-    void seekTo(long time);
-    SongInfo getCurrentMusicInfo();
-    void removeListener(MusicListener listener);
-    void setListener(MusicListener listener);
+    void openFile(String path);
+    void open(long [] list, int position);
+    int getQueuePosition();
     boolean isPlaying();
-//    long getDuration();
-    public interface MusicListener {
-        void playStart();
-        void playPause(long second);
-        void playGoon();
-    }
+    void stop();
+    void pause();
+    void play();
+    void prev();
+    void next();
+    long duration();
+    long position();
+    long seek(long pos);
+    String getTrackName();
+    String getAlbumName();
+    long getAlbumId();
+    String getArtistName();
+    long getArtistId();
+    void enqueue(long [] list, int action);
+    long [] getQueue();
+    void moveQueueItem(int from, int to);
+    void setQueuePosition(int index);
+    String getPath();
+    long getAudioId();
+    void setShuffleMode(int shufflemode);
+    int getShuffleMode();
+    int removeTracks(int first, int last);
+    int removeTrack(long id);
+    void setRepeatMode(int repeatmode);
+    int getRepeatMode();
+    int getMediaMountedCount();
+    int getAudioSessionId();
 }

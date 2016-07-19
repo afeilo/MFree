@@ -24,7 +24,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration{
     public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
         for(int i = 0;i < parent.getChildCount();i++){
             View v = parent.getChildAt(i);
-            c.drawRect(0,v.getHeight()*(i+1),v.getWidth(),v.getHeight()*(i+1)+divideHeight,paint);
+            c.drawRect(0,v.getBottom(),v.getWidth(),v.getBottom()+divideHeight,paint);
         }
 
     }

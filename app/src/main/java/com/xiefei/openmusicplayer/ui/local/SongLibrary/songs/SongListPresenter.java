@@ -28,7 +28,7 @@ public class SongListPresenter extends MvpBasePresenter<SongListView> {
             public void call(Subscriber<? super List<SongInfo>> subscriber) {
                 subscriber.onNext(songLoder.getSongs());
             }
-        }).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<SongInfo>>() {
                     @Override
                     public void call(List<SongInfo> songInfos) {

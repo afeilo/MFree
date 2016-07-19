@@ -1,4 +1,4 @@
-package com.xiefei.mvpstructure.fragment;
+package com.xiefei.openmusicplayer.ui.local;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,7 +15,7 @@ public class BaseFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d("BaseFragment","onCreate->"+getClass().getName());
+        Log.d(this.getClass().getName(),"onCreate->"+this);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 }

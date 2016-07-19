@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 public abstract class BaseLayoutFragment<P extends MvpPresenter,V extends MvpView>  extends MvpBaseFragment<P,V>{
     @BindView(R.id.list_content)
     protected RecyclerView contentView;
+
     @Override
     public int getLayout() {
         return R.layout.song_library_list_layout;

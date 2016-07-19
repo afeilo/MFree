@@ -25,7 +25,7 @@ public class ArtistListFragment extends BaseLayoutFragment<ArtistListPresenter,A
 
     @Override
     protected boolean isRetainInstance() {
-        return false;
+        return true;
     }
 
     @Override

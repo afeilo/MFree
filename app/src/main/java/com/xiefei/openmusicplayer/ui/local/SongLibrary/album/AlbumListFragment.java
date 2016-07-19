@@ -20,12 +20,12 @@ public class AlbumListFragment extends BaseLayoutFragment<AlbumListPresenter,Alb
 
     @Override
     public AlbumListPresenter createPresent() {
-        return new AlbumListPresenter(getContext());
+        return new AlbumListPresenter(getContext(),getLoaderManager());
     }
 
     @Override
     protected boolean isRetainInstance() {
-        return false;
+        return true;
     }
 
     @Override

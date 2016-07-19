@@ -27,10 +27,10 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.SongLi
     private ArrayList<SongInfo> songInfos = new ArrayList<>(0);
     public SongListAdapter(Context context) {
         this.context = context;
-        notifyDataSetChanged();
     }
     public void addSongs(List<SongInfo> songInfoList){
         songInfos.addAll(songInfoList);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -54,11 +54,11 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.SongLi
         return songInfos.size();
     }
     static class SongListViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.song_title)
+        @BindView(R.id.primary_title)
         TextView songTitle;
-        @BindView(R.id.song_artist)
+        @BindView(R.id.secondary_title)
         TextView songArtist;
-        @BindView(R.id.album_image)
+        @BindView(R.id.image)
         ImageView albumImage;
         public SongListViewHolder(View itemView) {
             super(itemView);

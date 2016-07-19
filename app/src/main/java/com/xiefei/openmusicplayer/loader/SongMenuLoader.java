@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.xiefei.openmusicplayer.API.BaiduService;
 import com.xiefei.openmusicplayer.entity.SongMenu;
+import com.xiefei.openmusicplayer.entity.SongMenuInfo;
 import com.xiefei.openmusicplayer.utils.Constant;
 
 import java.util.ArrayList;
@@ -37,5 +38,8 @@ public class SongMenuLoader {
     }
     public Call<SongMenu> getSongMenus(int pageSize, int pageNo){
         return baiduService.getSongMenus(pageSize,pageNo);
+    }
+    public Call<SongMenuInfo> getSongMenuInfos(String listId){
+        return baiduService.getSongMenuInfo(listId);
     }
 }

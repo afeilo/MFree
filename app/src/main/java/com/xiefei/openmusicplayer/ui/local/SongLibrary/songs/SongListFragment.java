@@ -1,10 +1,14 @@
 package com.xiefei.openmusicplayer.ui.local.SongLibrary.songs;
 
 import android.graphics.Color;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
 
 import com.xiefei.openmusicplayer.entity.SongInfo;
+import com.xiefei.openmusicplayer.loader.SongLoader;
 import com.xiefei.openmusicplayer.ui.local.SongLibrary.BaseLayoutFragment;
 import com.xiefei.openmusicplayer.ui.custom.DividerItemDecoration;
 
@@ -18,6 +22,14 @@ public class SongListFragment extends BaseLayoutFragment<SongListPresenter,SongL
 
 //
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        adapter = new SongListAdapter(getContext());
+        Log.d("songList",this.toString());
+    }
+
     @Override
     public SongListPresenter createPresent() {
         return new SongListPresenter(getContext());
@@ -25,18 +37,19 @@ public class SongListFragment extends BaseLayoutFragment<SongListPresenter,SongL
 
     @Override
     protected boolean isRetainInstance() {
-        return false;
+        return true;
     }
 
     @Override
     protected void bindData(View v) {
         super.bindData(v);
 //        RecyclerView contentView = (RecyclerView) v.findViewById(R.id.content);
-        adapter = new SongListAdapter(getContext());
+
         contentView.setLayoutManager(new LinearLayoutManager(getContext()));
         contentView.addItemDecoration(new DividerItemDecoration(Color.DKGRAY,1));
         contentView.setAdapter(adapter);
-        presenter.getData();
+//        presenter.getData();
+        adapter.addSongs(SongLoader.getInstance(getActivity()).getSongs());
     }
 
     @Override
