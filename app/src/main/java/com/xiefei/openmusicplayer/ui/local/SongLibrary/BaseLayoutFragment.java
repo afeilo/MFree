@@ -16,15 +16,15 @@ import butterknife.ButterKnife;
  */
 public abstract class BaseLayoutFragment<P extends MvpPresenter,V extends MvpView>  extends MvpBaseFragment<P,V>{
     @BindView(R.id.list_content)
-    protected RecyclerView contentView;
+    protected RecyclerView recyclerView;
 
     @Override
-    public int getLayout() {
+    public int getLayoutRes() {
         return R.layout.song_library_list_layout;
     }
 
     @Override
-    protected void bindData(View v) {
-        ButterKnife.bind(this,v);
+    protected void initView(View contentView) {
+        ButterKnife.bind(this,contentView);
     }
 }

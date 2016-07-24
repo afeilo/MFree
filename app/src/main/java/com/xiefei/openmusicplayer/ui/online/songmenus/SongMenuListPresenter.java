@@ -46,4 +46,9 @@ public class SongMenuListPresenter extends MvpBasePresenter<SongMenuListView> {
             }
         });
     }
+
+    @Override
+    public void cancel() {
+
+    }
 }

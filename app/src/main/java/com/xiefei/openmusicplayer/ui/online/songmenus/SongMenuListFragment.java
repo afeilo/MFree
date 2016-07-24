@@ -2,25 +2,20 @@ package com.xiefei.openmusicplayer.ui.online.songmenus;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.design.widget.TabLayout;
+import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
 import com.xiefei.mvpstructure.fragment.MvpBaseFragment;
 import com.xiefei.openmusicplayer.R;
-import com.xiefei.openmusicplayer.entity.Artist;
 import com.xiefei.openmusicplayer.entity.SongMenu;
 import com.xiefei.openmusicplayer.ui.MainActivity;
-import com.xiefei.openmusicplayer.ui.local.SongLibrary.BaseLayoutFragment;
 import com.xiefei.openmusicplayer.ui.custom.GradDividerItemDecoration;
 import com.xiefei.openmusicplayer.ui.online.songmenus.info.SongMenuInfoActivity;
-import com.xiefei.openmusicplayer.ui.online.songmenus.info.SongMenuInfoListAdapter;
 
 import java.util.List;
 
@@ -33,16 +28,16 @@ import butterknife.ButterKnife;
 public class SongMenuListFragment extends MvpBaseFragment<SongMenuListPresenter,SongMenuListView> implements
         SongMenuListView,SongMenuListAdapter.OnItemClickListener{
     @BindView(R.id.list_content)
-    RecyclerView contentView;
+    RecyclerView recyclerView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    private boolean isLoad;
+    private boolean isFirst = true;
     private SongMenuListAdapter adapter;
     private final int PAGE_SIZE = 20;
-
+    private List<SongMenu.ContentBean> songMenuInfos;
 
     @Override
-    public int getLayout() {
+    public int getLayoutRes() {
         return R.layout.song_menu_layout;
     }
 
@@ -56,22 +51,7 @@ public class SongMenuListFragment extends MvpBaseFragment<SongMenuListPresenter,
         return true;
     }
 
-    @Override
-    protected void bindData(View v) {
-        ButterKnife.bind(this,v);
-        if(!isLoad){
-            bindToolbar();
-//        RecyclerView contentView = (RecyclerView) v.findViewById(R.id.content);
-            adapter = new SongMenuListAdapter(getContext());
-            contentView.setLayoutManager(new GridLayoutManager(getContext(),2));
-            contentView.addItemDecoration(new GradDividerItemDecoration(Color.TRANSPARENT,16,2));
-            contentView.setAdapter(adapter);
-            adapter.setOnItemClickListener(this);
-            presenter.getData(PAGE_SIZE,1);
-        }else {
-            adapter.notifyDataSetChanged();
-        }
-    }
+
 
     private void bindToolbar() {
         MainActivity activity =  ((MainActivity)getActivity());
@@ -82,7 +62,35 @@ public class SongMenuListFragment extends MvpBaseFragment<SongMenuListPresenter,
         activity.drawerLayout.addDrawerListener(drawerToggle);
         activity.getSupportActionBar().setTitle(getResources().getString(R.string.online_song_menu));
     }
+    @Override
+    protected void initView(View contentView) {
+        ButterKnife.bind(this,contentView);
+        bindToolbar();
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+        recyclerView.addItemDecoration(new GradDividerItemDecoration(Color.TRANSPARENT,16,2));
+    }
 
+    @Override
+    protected void lazyLoad() {
+        super.lazyLoad();
+        if(isFirst){
+            adapter = new SongMenuListAdapter(getContext(), R.layout.songmenu_list_item);
+            recyclerView.setAdapter(adapter);
+            adapter.setOnItemClickListener(this);
+            if(songMenuInfos == null)
+                presenter.getData(PAGE_SIZE,1);
+            else
+                adapter.setDatas(songMenuInfos);
+        }
+        isFirst = false;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(isRetainInstance()&&adapter!=null)
+            songMenuInfos = adapter.getDatas();
+    }
     @Override
     public void showLoading(boolean isPullToRefresh) {
 
@@ -101,12 +109,11 @@ public class SongMenuListFragment extends MvpBaseFragment<SongMenuListPresenter,
     @Override
     public void setData(List<SongMenu.ContentBean> data) {
         Log.d("song","size->"+data.size());
-        adapter.addSongMenus(data);
+        adapter.setDatas(data);
     }
 
-
     @Override
-    public void onItemClick(View view, int position) {
+    public void onClick(View view, int position) {
         Intent intent = new Intent(getContext(), SongMenuInfoActivity.class);
         SongMenu.ContentBean contentBean = adapter.getData(position);
         intent.putExtra(SongMenuInfoActivity.SONG_MENU_ID,contentBean.getListid());

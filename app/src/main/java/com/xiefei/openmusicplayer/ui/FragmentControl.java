@@ -30,17 +30,26 @@ public class FragmentControl {
         FragmentTransaction transaction = manager.beginTransaction();
         Fragment fragment = manager.findFragmentByTag(clazz.getName());
         if(fragment!=null){
+            fragment.setUserVisibleHint(true);
             transaction.show(fragment);
-            if(lastTag!=null)
-                transaction.hide(manager.findFragmentByTag(lastTag));
+            if(lastTag!=null){
+                fragment = manager.findFragmentByTag(lastTag);
+                fragment.setUserVisibleHint(false);
+                transaction.hide(fragment);
+            }
         }else {
         try {
             fragment = (Fragment) clazz.newInstance();
             fragment.setRetainInstance(true);
             transaction.add(id,fragment,clazz.getName());
             tags.add(clazz.getName());
-            if(lastTag!=null)
-                transaction.hide(manager.findFragmentByTag(lastTag));
+            fragment.setUserVisibleHint(true);
+            if(lastTag!=null){
+                fragment = manager.findFragmentByTag(lastTag);
+                fragment.setUserVisibleHint(false);
+                transaction.hide(fragment);
+            }
+
         } catch (InstantiationException e) {
             e.printStackTrace();
             return false;
@@ -68,12 +77,21 @@ public class FragmentControl {
         FragmentTransaction transaction = manager.beginTransaction();
         if(list!=null){
             for (Fragment fragment:list) {
-                if(tags.contains(fragment.getClass().getName()))
+
+                if(tags.contains(fragment.getClass().getName())){
+                    fragment.setUserVisibleHint(false);
                     transaction.hide(fragment);
+                }
+
             }
         }
-        if(lastTag!=null)
-            transaction.show(manager.findFragmentByTag(lastTag));
+        if(lastTag!=null){
+            Fragment fragment = manager.findFragmentByTag(lastTag);
+            fragment.setUserVisibleHint(true);
+            transaction.show(fragment);
+        }
+
+
         transaction.commit();
     }
 

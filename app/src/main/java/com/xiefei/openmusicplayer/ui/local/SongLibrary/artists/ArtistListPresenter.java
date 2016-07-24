@@ -35,4 +35,8 @@ public class ArtistListPresenter extends MvpBasePresenter<ArtistListView> {
                         getView().setData(artists);
                     }});
     }
+
+    @Override
+    public void cancel() {
+    }
 }

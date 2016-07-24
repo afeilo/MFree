@@ -1,9 +1,11 @@
 package com.xiefei.openmusicplayer.ui.local.SongLibrary.album;
 
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.View;
 
+import com.xiefei.openmusicplayer.R;
 import com.xiefei.openmusicplayer.entity.Album;
 import com.xiefei.openmusicplayer.ui.local.SongLibrary.BaseLayoutFragment;
 import com.xiefei.openmusicplayer.ui.custom.GradDividerItemDecoration;
@@ -15,7 +17,8 @@ import java.util.List;
  */
 public class AlbumListFragment extends BaseLayoutFragment<AlbumListPresenter,AlbumListView> implements AlbumListView {
     private AlbumListAdapter adapter;
-
+    private boolean isFirst = true;
+    private List<Album> albums;
 //
 
     @Override
@@ -25,19 +28,9 @@ public class AlbumListFragment extends BaseLayoutFragment<AlbumListPresenter,Alb
 
     @Override
     protected boolean isRetainInstance() {
-        return false;
+        return true;
     }
 
-    @Override
-    protected void bindData(View v) {
-        super.bindData(v);
-//        RecyclerView contentView = (RecyclerView) v.findViewById(R.id.content);
-        adapter = new AlbumListAdapter(getContext());
-        contentView.setLayoutManager(new GridLayoutManager(getContext(),2));
-        contentView.addItemDecoration(new GradDividerItemDecoration(Color.TRANSPARENT,16,2));
-        contentView.setAdapter(adapter);
-        presenter.getData();
-    }
 
     @Override
     public void showLoading(boolean isPullToRefresh) {
@@ -56,7 +49,33 @@ public class AlbumListFragment extends BaseLayoutFragment<AlbumListPresenter,Alb
 
     @Override
     public void setData(List<Album> data) {
-        adapter.addSongs(data);
+        adapter.setDatas(data);
+    }
+    @Override
+    protected void initView(View contentView) {
+        super.initView(contentView);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+        recyclerView.addItemDecoration(new GradDividerItemDecoration(Color.TRANSPARENT,16,2));
     }
 
+    @Override
+    protected void lazyLoad() {
+        super.lazyLoad();
+        if(isFirst){
+            adapter = new AlbumListAdapter(getContext(), R.layout.album_list_item);
+            recyclerView.setAdapter(adapter);
+            if(albums == null)
+                presenter.getData();
+            else
+                adapter.setDatas(albums);
+        }
+        isFirst = false;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(isRetainInstance() && adapter !=null)
+            albums = adapter.getDatas();
+    }
 }

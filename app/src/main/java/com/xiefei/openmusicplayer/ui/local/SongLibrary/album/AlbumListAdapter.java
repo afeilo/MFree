@@ -1,6 +1,7 @@
 package com.xiefei.openmusicplayer.ui.local.SongLibrary.album;
 
 import android.content.Context;
+import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.xiefei.library.XRecyclerAdapter;
+import com.xiefei.library.XViewHolderHelper;
 import com.xiefei.openmusicplayer.R;
 import com.xiefei.openmusicplayer.entity.Album;
 import com.xiefei.openmusicplayer.utils.OpenMusicPlayerUtils;
@@ -22,41 +25,25 @@ import butterknife.ButterKnife;
 /**
  * Created by xiefei on 16/7/10.
  */
-public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.AlbumListViewHolder>{
-    private Context context;
-    private ArrayList<Album> albums = new ArrayList<>(0);
-    public AlbumListAdapter(Context context) {
-        this.context = context;
-        notifyDataSetChanged();
-    }
-    public void addSongs(List<Album> albumList){
-        albums.addAll(albumList);
-        notifyDataSetChanged();
+public class AlbumListAdapter extends XRecyclerAdapter<Album> {
+
+
+    public AlbumListAdapter(Context context, @LayoutRes int layoutId) {
+        super(context, layoutId);
     }
 
     @Override
-    public AlbumListAdapter.AlbumListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new AlbumListViewHolder(LayoutInflater.from(context).inflate(R.layout.artist_list_item,parent,false));
-    }
-
-    @Override
-    public void onBindViewHolder(AlbumListViewHolder holder, int position) {
-        Album album = albums.get(position);
-//        holder.songTitle.setText(songInfo.getTitle());
-//        holder.songArtist.setText(songInfo.getArtist());
-        holder.primaryTitle.setText(album.getAlbum());
-        holder.secondaryTitle.setText("歌曲数量:"+album.getNumSongs());
-        holder.image.setImageResource(R.mipmap.ic_launcher);
+    public void bindItemView(XViewHolderHelper holderHelper, Album data, int position) {
+        ((TextView)holderHelper.getViewById(R.id.primary_title)).setText(data.getAlbum());
+        ((TextView)holderHelper.getViewById(R.id.secondary_title)).setText("歌曲数量:"+data.getNumSongs());
         Glide.with(context.getApplicationContext())
-                .load(OpenMusicPlayerUtils.getAlbumArtUri(album.getArtistId()))
+                .load(OpenMusicPlayerUtils.getAlbumArtUri(data.getArtistId()))
                 .placeholder(R.mipmap.ic_launcher)
-                .into(holder.image);
+                .into((ImageView) holderHelper.getViewById(R.id.image));
     }
 
-    @Override
-    public int getItemCount() {
-        return albums.size();
-    }
+
+
     static class AlbumListViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.primary_title)
         TextView primaryTitle;

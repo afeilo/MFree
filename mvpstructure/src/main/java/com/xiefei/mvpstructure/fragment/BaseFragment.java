@@ -3,6 +3,7 @@ package com.xiefei.mvpstructure.fragment;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,17 +15,14 @@ import android.view.ViewGroup;
  */
 public abstract class BaseFragment extends Fragment{
     private View mContentView;//默认加载的布局
-    private static final String Tag = BaseFragment.class.getName();
-    private ViewGroup container;
+    private final String Tag = this.getClass().getName();
     protected Boolean isVisible = false;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // 避免多次从xml中加载布局文件
         if (mContentView == null) {
-            initView(savedInstanceState);
-            lazyLoad();
-            setListener();
-            processLogic(savedInstanceState);
+            setContentView(getLayoutRes(),container);
+            initView(mContentView);
         } else {
             ViewGroup parent = (ViewGroup) mContentView.getParent();
             if (parent != null) {
@@ -35,53 +33,55 @@ public abstract class BaseFragment extends Fragment{
     }
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if(getUserVisibleHint()){
-            if(getUserVisibleHint()){
-                isVisible = true;
-                onVisible();
-            }else {
-                if(isVisible){
-                    onUnvisible();
-                }
-                isVisible =false;
+        Log.d(Tag,"userVisible->"+getUserVisibleHint());
+        if(isVisibleToUser) {
+            isVisible = true;
+            onVisible();
+            checkLazyLoad();
+        }else{
+            if(isVisible){
+                unVisible();
             }
+            isVisible =false;
+        }
+
+    }
+
+    protected void checkLazyLoad() {
+        if(mContentView!=null&&getUserVisibleHint()){
+            lazyLoad();
         }
     }
-    protected void onVisible(){
-        lazyLoad();
+    protected  void lazyLoad(){}
+    /**
+     * 初始化View(第一次初始化时候才会调用,注意一般该方法只用户绑定View)
+     * @param contentView
+     */
+    protected abstract void initView(View contentView);
+
+    /**
+     * 当界面可见时调用
+     */
+    protected void onVisible(){}
+
+    /**
+     * 当界面不可见时调用(主要用于实现懒加载)
+     */
+    protected void unVisible(){}
+    protected abstract @LayoutRes int getLayoutRes();
+    protected void setContentView(@LayoutRes int layoutResID, ViewGroup container) {
+        mContentView = LayoutInflater.from(getContext()).inflate(layoutResID, container,false);
     }
-    protected void onUnvisible(){}
-    protected abstract void lazyLoad();
-    /**
-     * 初始化View控件
-     */
-    protected abstract void initView(Bundle savedInstanceState);
-    /*
-    为View设置监听器
-     */
-    protected abstract void setListener();
-    /**
-     * 处理业务逻辑，状态恢复等操作
-     *
-     * @param savedInstanceState
-     */
-    protected abstract void processLogic(Bundle savedInstanceState);
-    /**
-     * 查找View
-     *
-     * @param id   控件的id
-     * @param <VT> View类型
-     * @return
-     */
     protected <VT extends View> VT getViewById(@IdRes int id) {
         return (VT) mContentView.findViewById(id);
     }
-    /**
-     * 当fragment对用户可见时，会调用该方法，可在该方法中懒加载网络数据
-     */
-    protected abstract void onUserVisible();
 
     @Override
     public void onDestroyView() {

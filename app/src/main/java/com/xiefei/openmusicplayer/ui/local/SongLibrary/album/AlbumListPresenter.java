@@ -81,4 +81,9 @@ public class AlbumListPresenter extends MvpBasePresenter<AlbumListView> implemen
     public void onLoaderReset(Loader loader) {
 
     }
+
+    @Override
+    public void cancel() {
+        loaderManager.destroyLoader(0);
+    }
 }

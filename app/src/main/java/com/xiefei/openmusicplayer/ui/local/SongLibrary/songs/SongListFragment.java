@@ -26,12 +26,13 @@ import java.util.List;
  * Created by xiefei on 16/7/10.
  */
 public class SongListFragment extends BaseLayoutFragment<SongListPresenter,SongListView> implements SongListView
-        ,XRecyclerAdapter.OnItemClickListener<SongInfo>{
+        ,XRecyclerAdapter.OnItemClickListener{
     private SongListAdapter adapter;
+    private boolean isFirst = true;
+    private List<SongInfo> songInfos = null;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Log.d("songList",this.toString());
     }
 
@@ -48,19 +49,6 @@ public class SongListFragment extends BaseLayoutFragment<SongListPresenter,SongL
     @Override
     protected boolean isRetainInstance() {
         return true;
-    }
-
-    @Override
-    protected void bindData(View v) {
-        super.bindData(v);
-//        RecyclerView contentView = (RecyclerView) v.findViewById(R.id.content);
-        adapter = new SongListAdapter(getContext(), R.layout.song_list_item);
-        contentView.setLayoutManager(new LinearLayoutManager(getContext()));
-        contentView.addItemDecoration(new DividerItemDecoration(Color.DKGRAY,1));
-        contentView.setAdapter(adapter);
-        adapter.setOnItemClickListener(this);
-//        presenter.getData();
-        adapter.setDatas(SongLoader.getInstance(getActivity()).getSongs());
     }
 
     @Override
@@ -83,14 +71,39 @@ public class SongListFragment extends BaseLayoutFragment<SongListPresenter,SongL
         adapter.setDatas(data);
     }
 
+
     @Override
-    public void onClick(View view, int position, SongInfo data) {
-//        try {
-//            contentActivity.getServiceStub().open(new long[]{data.getId()},0);
-//            contentActivity.getServiceStub().play();
-//        } catch (RemoteException e) {
-//            e.printStackTrace();
-//        }
+    protected void initView(View contentView) {
+        super.initView(contentView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(Color.DKGRAY,1));
+    }
+
+    @Override
+    protected void lazyLoad() {
+        super.lazyLoad();
+        if(isFirst){
+            adapter = new SongListAdapter(getContext(), R.layout.song_list_item);
+            adapter.setOnItemClickListener(this);
+            recyclerView.setAdapter(adapter);
+            if(songInfos == null)
+                presenter.getData();
+            else
+                adapter.setDatas(songInfos);
+        }
+        isFirst = false;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(isRetainInstance()&&adapter!=null){
+            songInfos = adapter.getDatas();
+        }
+    }
+
+    @Override
+    public void onClick(View view, int position) {
         MusicServiceUtils.setPlayList(adapter.getDatas(),position);
         MusicServiceUtils.play();
     }

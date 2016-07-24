@@ -15,9 +15,9 @@ import com.xiefei.mvpstructure.view.MvpView;
 /**
  * Created by xiefei on 2016/3/16.
  */
-public abstract class MvpBaseFragment<P extends MvpPresenter,V extends MvpView> extends Fragment implements MvpView {
+public abstract class MvpBaseFragment<P extends MvpPresenter,V extends MvpView> extends BaseFragment implements MvpView {
     protected P presenter;
-    protected View backView;
+    private boolean isAttatch = false;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,23 +25,25 @@ public abstract class MvpBaseFragment<P extends MvpPresenter,V extends MvpView> 
             presenter = createPresent();
         setRetainInstance(isRetainInstance());
     }
-
     //将P与V绑定
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         presenter.attachView(getMvpView());
-        bindData(view);
+        isAttatch = true;
+        checkLazyLoad();
     }
 
-    @Nullable
+    /**
+     * 只有绑定成功后才能进行懒加载
+     */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater,container,savedInstanceState);
-        if(backView == null)
-            backView = inflater.inflate(getLayout(),container,false);
-        return backView;
+    protected void checkLazyLoad() {
+        if(isAttatch && getUserVisibleHint()){
+            lazyLoad();
+        }
     }
+
     public V getMvpView(){
         return (V) this;
     }
@@ -62,8 +64,6 @@ public abstract class MvpBaseFragment<P extends MvpPresenter,V extends MvpView> 
 
     }
 
-    public abstract @LayoutRes int getLayout();
     public abstract P createPresent();
     protected abstract boolean isRetainInstance();
-    protected abstract void bindData(View v);
 }

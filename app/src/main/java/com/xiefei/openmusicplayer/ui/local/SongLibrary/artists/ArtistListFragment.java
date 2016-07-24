@@ -1,12 +1,18 @@
 package com.xiefei.openmusicplayer.ui.local.SongLibrary.artists;
 
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
+import com.xiefei.openmusicplayer.R;
 import com.xiefei.openmusicplayer.entity.Artist;
+import com.xiefei.openmusicplayer.entity.SongInfo;
+import com.xiefei.openmusicplayer.ui.custom.DividerItemDecoration;
 import com.xiefei.openmusicplayer.ui.local.SongLibrary.BaseLayoutFragment;
 import com.xiefei.openmusicplayer.ui.custom.GradDividerItemDecoration;
+import com.xiefei.openmusicplayer.ui.local.SongLibrary.songs.SongListAdapter;
 
 import java.util.List;
 
@@ -15,8 +21,8 @@ import java.util.List;
  */
 public class ArtistListFragment extends BaseLayoutFragment<ArtistListPresenter,ArtistListView> implements ArtistListView {
     private ArtistListAdapter adapter;
-
-//
+    private boolean isFirst = true;
+    private List<Artist> artists;
 
     @Override
     public ArtistListPresenter createPresent() {
@@ -28,16 +34,6 @@ public class ArtistListFragment extends BaseLayoutFragment<ArtistListPresenter,A
         return true;
     }
 
-    @Override
-    protected void bindData(View v) {
-        super.bindData(v);
-//        RecyclerView contentView = (RecyclerView) v.findViewById(R.id.content);
-        adapter = new ArtistListAdapter(getContext());
-        contentView.setLayoutManager(new GridLayoutManager(getContext(),2));
-        contentView.addItemDecoration(new GradDividerItemDecoration(Color.TRANSPARENT,16,2));
-        contentView.setAdapter(adapter);
-        presenter.getData();
-    }
 
     @Override
     public void showLoading(boolean isPullToRefresh) {
@@ -56,7 +52,34 @@ public class ArtistListFragment extends BaseLayoutFragment<ArtistListPresenter,A
 
     @Override
     public void setData(List<Artist> data) {
-        adapter.addSongs(data);
+        adapter.setDatas(data);
+    }
+    @Override
+    protected void initView(View contentView) {
+        super.initView(contentView);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+        recyclerView.addItemDecoration(new GradDividerItemDecoration(Color.TRANSPARENT,16,2));
+    }
+
+    @Override
+    protected void lazyLoad() {
+        super.lazyLoad();
+        if(isFirst){
+            adapter = new ArtistListAdapter(getContext(), R.layout.artist_list_item);
+            recyclerView.setAdapter(adapter);
+            if(artists == null)
+                presenter.getData();
+            else
+                adapter.setDatas(artists);
+        }
+        isFirst = false;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(isRetainInstance()&&adapter!=null)
+            artists = adapter.getDatas();
     }
 
 }

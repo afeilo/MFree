@@ -35,4 +35,9 @@ public class SongListPresenter extends MvpBasePresenter<SongListView> {
                         getView().setData(songInfos);
                     }});
     }
+
+    @Override
+    public void cancel() {
+
+    }
 }

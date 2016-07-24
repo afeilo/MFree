@@ -38,4 +38,9 @@ public class SongMenuInfoListPresenter extends MvpBasePresenter<SongMenuInfoList
             }
         });
     }
+
+    @Override
+    public void cancel() {
+
+    }
 }

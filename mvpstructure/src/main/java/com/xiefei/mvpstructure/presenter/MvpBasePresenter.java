@@ -10,7 +10,7 @@ import java.lang.ref.WeakReference;
 /**
  * Created by xiefei on 2016/3/16.
  */
-public class MvpBasePresenter<V extends MvpView> implements MvpPresenter<V>{
+public abstract class MvpBasePresenter<V extends MvpView> implements MvpPresenter<V>{
     private WeakReference<V> weakReference;
     @Override
     public void attachView(V view) {
@@ -34,7 +34,8 @@ public class MvpBasePresenter<V extends MvpView> implements MvpPresenter<V>{
             weakReference = null;
         }
         if(retainInstance == false){
-
+            cancel();
         }
     }
+    public abstract void cancel();
 }

@@ -17,7 +17,7 @@ import java.util.List;
 public abstract class XRecyclerAdapter<M> extends RecyclerView.Adapter<XRecyclerViewHolder>{
     protected Context context;
     protected @LayoutRes int layoutId;
-    protected List<M> datas;
+    protected List<M> datas = null;
     protected OnItemClickListener onItemClickListener;
     public XRecyclerAdapter(Context context, @LayoutRes int layoutId){
         this.context = context;
@@ -66,7 +66,7 @@ public abstract class XRecyclerAdapter<M> extends RecyclerView.Adapter<XRecycler
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onItemClickListener.onClick(holder.itemView,position,datas.get(position));
+                    onItemClickListener.onClick(holder.itemView,position);
                 }
             });
         }
@@ -77,7 +77,7 @@ public abstract class XRecyclerAdapter<M> extends RecyclerView.Adapter<XRecycler
     public int getItemCount() {
         return datas == null? 0 : datas.size();
     }
-    public interface OnItemClickListener<M>{
-        void onClick(View view,int position,M data);
+    public interface OnItemClickListener{
+        void onClick(View view,int position);
     }
 }
