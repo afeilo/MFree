@@ -31,7 +31,7 @@ public class ArtistListAdapter extends XRecyclerAdapter<Artist>{
     @Override
     public void bindItemView(XViewHolderHelper holderHelper, Artist data, int position) {
         ((TextView)holderHelper.getViewById(R.id.primary_title)).setText(data.getAstist());
-        ((TextView)holderHelper.getViewById(R.id.secondary_title)).setText("歌曲数量"+data.getNumberOfTracks());
-        ((ImageView)holderHelper.getViewById(R.id.image)).setImageResource(R.mipmap.ic_launcher);
+        ((TextView)holderHelper.getViewById(R.id.secondary_title)).setText("歌曲数量:"+data.getNumberOfTracks());
+        ((ImageView)holderHelper.getViewById(R.id.image)).setImageResource(R.mipmap.logo_icon);
     }
 }

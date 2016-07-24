@@ -1,19 +1,24 @@
 package com.xiefei.openmusicplayer.ui.online.songmenus.info;
 
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.xiefei.library.XRecyclerAdapter;
 import com.xiefei.mvpstructure.fragment.MvpBaseActivity;
+import com.xiefei.openmusicplayer.MusicServiceUtils;
 import com.xiefei.openmusicplayer.R;
 import com.xiefei.openmusicplayer.entity.SongMenuInfo;
 import com.xiefei.openmusicplayer.ui.custom.DividerItemDecoration;
@@ -27,7 +32,8 @@ import butterknife.ButterKnife;
  * Created by xiefei on 16/7/13.
  */
 public class SongMenuInfoActivity extends MvpBaseActivity<SongMenuInfoListPresenter,SongMenuInfoListView>
-        implements SongMenuInfoListView{
+        implements SongMenuInfoListView,XRecyclerAdapter.OnItemClickListener{
+    private static final String Tag = SongMenuInfoActivity.class.getName();
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.list_content)
@@ -66,6 +72,7 @@ public class SongMenuInfoActivity extends MvpBaseActivity<SongMenuInfoListPresen
         listContent.addItemDecoration(new DividerItemDecoration(Color.BLACK,1));
         adapter = new SongMenuInfoListAdapter(this,R.layout.song_list_item);
         listContent.setAdapter(adapter);
+        adapter.setOnItemClickListener(this);
     }
 
     @Override
@@ -101,5 +108,17 @@ public class SongMenuInfoActivity extends MvpBaseActivity<SongMenuInfoListPresen
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View view, int position) {
+        String url = adapter.getData(position).getSongUrl();
+        if(url==null)
+            Snackbar.make(view,"歌曲未获取到链接!",Snackbar.LENGTH_SHORT).setAction("ok",null);
+        else {
+            MusicServiceUtils.openFile(adapter.getData(position).getSongUrl());
+            MusicServiceUtils.play();
+        }
+
     }
 }

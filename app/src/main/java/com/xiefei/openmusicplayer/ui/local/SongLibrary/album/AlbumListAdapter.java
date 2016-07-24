@@ -38,23 +38,7 @@ public class AlbumListAdapter extends XRecyclerAdapter<Album> {
         ((TextView)holderHelper.getViewById(R.id.secondary_title)).setText("歌曲数量:"+data.getNumSongs());
         Glide.with(context.getApplicationContext())
                 .load(OpenMusicPlayerUtils.getAlbumArtUri(data.getArtistId()))
-                .placeholder(R.mipmap.ic_launcher)
+                .placeholder(R.mipmap.logo_icon)
                 .into((ImageView) holderHelper.getViewById(R.id.image));
-    }
-
-
-
-    static class AlbumListViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.primary_title)
-        TextView primaryTitle;
-        @BindView(R.id.secondary_title)
-        TextView secondaryTitle;
-        @BindView(R.id.image)
-        ImageView image;
-        public AlbumListViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this,itemView);
-        }
-
     }
 }

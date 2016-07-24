@@ -72,7 +72,13 @@ public class MusicService extends Service implements MusicPlayer{
 
     @Override
     public void openFile(String path) {
-
+        mediaPlayer.reset();
+        try {
+            mediaPlayer.setDataSource(path);
+            mediaPlayer.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

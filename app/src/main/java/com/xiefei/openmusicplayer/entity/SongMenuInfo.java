@@ -213,6 +213,15 @@ public class SongMenuInfo {
         private String korean_bb_song;
         private String mv_provider;
         private String share;
+        private String songUrl;
+
+        public String getSongUrl() {
+            return songUrl;
+        }
+
+        public void setSongUrl(String songUrl) {
+            this.songUrl = songUrl;
+        }
 
         public String getTitle() {
             return title;

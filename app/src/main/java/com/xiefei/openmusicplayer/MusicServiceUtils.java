@@ -104,6 +104,15 @@ public class MusicServiceUtils {
         }
     }
 
+    public static void openFile(String path) {
+        if(mService!=null){
+            try {
+                mService.openFile(path);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 
     //内部类,用来管理bindService

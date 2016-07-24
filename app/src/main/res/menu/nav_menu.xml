@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
     <item
         android:id="@+id/local"
+        android:checked="true"
+        android:icon="@mipmap/location"
         android:title="本地"></item>
     <item
         android:id="@+id/remote"
+        android:icon="@mipmap/online"
         android:title="乐库"></item>
+    </group>
+
 </menu>

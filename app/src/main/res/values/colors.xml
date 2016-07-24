@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#1F1924</color>
+    <color name="colorPrimaryDark">#1F1924</color>
+    <color name="colorAccent">#80D0CD</color>
 
     <color name="seekbar_bg">#40537167</color>
     <color name="seekbar_progress_bg">#99ffffff</color>
     <color name="play_bar_article_color">#99ffffff</color>
+
+    <color name="music_bar_bg">#cc000000</color>
 </resources>
