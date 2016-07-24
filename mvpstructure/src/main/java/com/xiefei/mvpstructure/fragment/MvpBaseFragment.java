@@ -56,6 +56,12 @@ public abstract class MvpBaseFragment<P extends MvpPresenter,V extends MvpView> 
         setRetainInstance(isRetainInstance());
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+    }
+
     public abstract @LayoutRes int getLayout();
     public abstract P createPresent();
     protected abstract boolean isRetainInstance();

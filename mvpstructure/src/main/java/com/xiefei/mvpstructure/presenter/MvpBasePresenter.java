@@ -22,11 +22,19 @@ public class MvpBasePresenter<V extends MvpView> implements MvpPresenter<V>{
     public boolean isDetached(){
         return weakReference==null?false:true;
     }
+
+    /**
+     * 如果为可持有则不需要中断异步任务
+     * @param retainInstance 是否为可持有
+     */
     @Override
     public void detachView(boolean retainInstance) {
         if(weakReference!=null){
             weakReference.clear();
             weakReference = null;
+        }
+        if(retainInstance == false){
+
         }
     }
 }

@@ -1,0 +1,45 @@
+apply plugin: 'com.android.library'
+//apply plugin: 'com.novoda.bintray-release'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.0"
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:24.0.0'
+    compile 'com.android.support:recyclerview-v7:24.0.0'
+}
+//配置到jcenter
+//
+//publish {
+//    //bintray.com用户名
+//    userOrg = 'afei'
+//    //jcenter上的路径
+//    groupId = 'com.afei'
+//    //项目名称
+//    artifactId = 'x-recycleradapter'
+//    //版本号
+//    publishVersion = '1.0.0'
+//    //描述，不重要
+//    desc = '实现RecyclerView万能适配'
+//    //网站，不重要
+//    website = ''
+//
+//}
