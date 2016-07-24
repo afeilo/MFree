@@ -36,7 +36,7 @@ public class SongMenuListFragment extends MvpBaseFragment<SongMenuListPresenter,
     RecyclerView contentView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-
+    private boolean isLoad;
     private SongMenuListAdapter adapter;
     private final int PAGE_SIZE = 20;
 
@@ -53,20 +53,24 @@ public class SongMenuListFragment extends MvpBaseFragment<SongMenuListPresenter,
 
     @Override
     protected boolean isRetainInstance() {
-        return false;
+        return true;
     }
 
     @Override
     protected void bindData(View v) {
         ButterKnife.bind(this,v);
-        bindToolbar();
+        if(!isLoad){
+            bindToolbar();
 //        RecyclerView contentView = (RecyclerView) v.findViewById(R.id.content);
-        adapter = new SongMenuListAdapter(getContext());
-        contentView.setLayoutManager(new GridLayoutManager(getContext(),2));
-        contentView.addItemDecoration(new GradDividerItemDecoration(Color.TRANSPARENT,16,2));
-        contentView.setAdapter(adapter);
-        adapter.setOnItemClickListener(this);
-        presenter.getData(PAGE_SIZE,1);
+            adapter = new SongMenuListAdapter(getContext());
+            contentView.setLayoutManager(new GridLayoutManager(getContext(),2));
+            contentView.addItemDecoration(new GradDividerItemDecoration(Color.TRANSPARENT,16,2));
+            contentView.setAdapter(adapter);
+            adapter.setOnItemClickListener(this);
+            presenter.getData(PAGE_SIZE,1);
+        }else {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     private void bindToolbar() {

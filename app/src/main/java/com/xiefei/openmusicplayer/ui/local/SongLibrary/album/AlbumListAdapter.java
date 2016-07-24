@@ -31,6 +31,7 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Albu
     }
     public void addSongs(List<Album> albumList){
         albums.addAll(albumList);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -46,7 +47,7 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Albu
         holder.primaryTitle.setText(album.getAlbum());
         holder.secondaryTitle.setText("歌曲数量:"+album.getNumSongs());
         holder.image.setImageResource(R.mipmap.ic_launcher);
-        Glide.with(context)
+        Glide.with(context.getApplicationContext())
                 .load(OpenMusicPlayerUtils.getAlbumArtUri(album.getArtistId()))
                 .placeholder(R.mipmap.ic_launcher)
                 .into(holder.image);

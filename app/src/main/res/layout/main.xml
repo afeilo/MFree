@@ -9,11 +9,8 @@
     android:fitsSystemWindows="true"
     tools:context=".ui.MainActivity">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/content"
-        android:orientation="horizontal"></FrameLayout>
+    <include layout="@layout/main_layout"></include>
+
 
     <android.support.design.widget.NavigationView
         android:layout_height="match_parent"

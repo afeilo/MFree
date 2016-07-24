@@ -31,8 +31,7 @@ public abstract class MvpBaseFragment<P extends MvpPresenter,V extends MvpView> 
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         presenter.attachView(getMvpView());
-        if(savedInstanceState==null)
-            bindData(view);
+        bindData(view);
     }
 
     @Nullable

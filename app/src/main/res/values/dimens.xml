@@ -9,4 +9,6 @@
     <dimen name="standard_text_large">18sp</dimen>
 
     <dimen name="song_list_item_image_size">48dp</dimen>
+
+    <dimen name="player_bar_padding">12dp</dimen>
 </resources>

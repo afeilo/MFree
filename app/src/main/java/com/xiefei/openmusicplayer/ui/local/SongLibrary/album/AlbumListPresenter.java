@@ -61,14 +61,14 @@ public class AlbumListPresenter extends MvpBasePresenter<AlbumListView> implemen
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         ArrayList arrayList = new ArrayList();
         Cursor cursor = data;
-        if ((cursor != null) && (cursor.moveToFirst()))
+        if ((cursor != null) &&!cursor.isClosed()&& (cursor.moveToFirst()))
             do {
                 Album album = getAlbumInfo(cursor);
                 arrayList.add(album);
             }
             while (cursor.moveToNext());
-        if (cursor != null)
-            cursor.close();
+//        if (cursor != null)
+//            cursor.close();
         getView().setData(arrayList);
     }
 

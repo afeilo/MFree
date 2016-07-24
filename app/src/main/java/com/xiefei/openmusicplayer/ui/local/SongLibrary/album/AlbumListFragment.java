@@ -25,7 +25,7 @@ public class AlbumListFragment extends BaseLayoutFragment<AlbumListPresenter,Alb
 
     @Override
     protected boolean isRetainInstance() {
-        return true;
+        return false;
     }
 
     @Override

@@ -17,6 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.online.songmenus.info.SongMenuInfoActivity"></activity>
+        <service android:name=".service.MusicService" android:process=":main"></service>
     </application>
 
 </manifest>
