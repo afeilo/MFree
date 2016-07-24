@@ -23,6 +23,8 @@ v1.0 主要搭建整体框架和实现播放逻辑。
 ![在线歌单](http://upload-images.jianshu.io/upload_images/1757399-2f278368e2fc992a.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/500)
 ![在线歌单](http://upload-images.jianshu.io/upload_images/1757399-6168f93f6b660075.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/500)
 ![在线歌单](http://upload-images.jianshu.io/upload_images/1757399-e78762c5665e38fc.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/500)
+
+
 心得：
 1.为了保存Fragment状态踩了很多坑，为了避免重复加载也做了很多精心的小设计，但是不免有很多BUG，慢慢去发现。
 2.Service的设计，官方音乐播放器使用aidl设计，于是机智的我就拷贝了官方的aidl文件，模仿它进行设计的（感觉还是有很多欠缺，以后慢慢磨），以及简化调用而设计的utils。
