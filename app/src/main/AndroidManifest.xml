@@ -16,8 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.online.songmenus.info.SongMenuInfoActivity"></activity>
         <service android:name=".service.MusicService" android:process=":main"></service>
+        <activity android:name=".ui.NowPlayingActivity"></activity>
     </application>
 
 </manifest>

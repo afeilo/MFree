@@ -40,7 +40,7 @@ public class FragmentControl {
         }else {
         try {
             fragment = (Fragment) clazz.newInstance();
-            fragment.setRetainInstance(true);
+//            fragment.setRetainInstance(true);
             transaction.add(id,fragment,clazz.getName());
             tags.add(clazz.getName());
             fragment.setUserVisibleHint(true);
@@ -77,7 +77,8 @@ public class FragmentControl {
         FragmentTransaction transaction = manager.beginTransaction();
         if(list!=null){
             for (Fragment fragment:list) {
-
+                if(fragment==null)
+                    continue;
                 if(tags.contains(fragment.getClass().getName())){
                     fragment.setUserVisibleHint(false);
                     transaction.hide(fragment);

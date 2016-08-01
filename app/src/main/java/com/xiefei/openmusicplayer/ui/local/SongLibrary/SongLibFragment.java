@@ -9,16 +9,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.xiefei.mvpstructure.fragment.BaseFragment;
 import com.xiefei.openmusicplayer.R;
 import com.xiefei.openmusicplayer.ui.MainActivity;
-import com.xiefei.openmusicplayer.ui.local.BaseFragment;
 import com.xiefei.openmusicplayer.ui.local.SongLibrary.album.AlbumListFragment;
 import com.xiefei.openmusicplayer.ui.local.SongLibrary.artists.ArtistListFragment;
 import com.xiefei.openmusicplayer.ui.local.SongLibrary.songs.SongListFragment;
@@ -47,34 +45,35 @@ public class SongLibFragment extends BaseFragment {
     private String[] mTabTitles;
     private Fragment[] mTabFragments;
     private OpenViewPager openViewPager;
-    private View view;
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater,container,savedInstanceState);
-        if(view==null)
-            view = inflater.inflate(R.layout.song_lib_layout,container,false);
-        return view;
-    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        if(savedInstanceState==null) {
-            ButterKnife.bind(this, view);
-            bindToolbar();
-            mTabTitles = new String[TAB_COUNT];
-            mTabTitles[TAB_INDEX_SONG] = getResources().getString(R.string.song);
-            mTabTitles[TAB_INDEX_ALBUM] = getResources().getString(R.string.album);
-            mTabTitles[TAB_INDEX_ARTIST] = getResources().getString(R.string.artist);
-            mTabFragments = new Fragment[TAB_COUNT];
-            mTabFragments[TAB_INDEX_SONG] = new SongListFragment();
-            mTabFragments[TAB_INDEX_ALBUM] = new AlbumListFragment();
-            mTabFragments[TAB_INDEX_ARTIST] = new ArtistListFragment();
-            openViewPager = new OpenViewPager(getFragmentManager());
-            viewPager.setAdapter(openViewPager);
-            viewPager.setOffscreenPageLimit(TAB_COUNT);
-            tabLayout.setupWithViewPager(viewPager);
-        }
+
+    }
+
+    @Override
+    protected void initView(View contentView) {
+
+        ButterKnife.bind(this, contentView);
+        bindToolbar();
+//        viewPager = getViewById(R.id.view_pager);
+        mTabTitles = new String[TAB_COUNT];
+        mTabTitles[TAB_INDEX_SONG] = getResources().getString(R.string.song);
+        mTabTitles[TAB_INDEX_ALBUM] = getResources().getString(R.string.album);
+        mTabTitles[TAB_INDEX_ARTIST] = getResources().getString(R.string.artist);
+        mTabFragments = new Fragment[TAB_COUNT];
+        mTabFragments[TAB_INDEX_SONG] = new SongListFragment();
+        mTabFragments[TAB_INDEX_ALBUM] = new AlbumListFragment();
+        mTabFragments[TAB_INDEX_ARTIST] = new ArtistListFragment();
+        openViewPager = new OpenViewPager(getFragmentManager());
+        viewPager.setAdapter(openViewPager);
+        viewPager.setOffscreenPageLimit(TAB_COUNT);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.song_lib_layout;
     }
 
     private void bindToolbar() {

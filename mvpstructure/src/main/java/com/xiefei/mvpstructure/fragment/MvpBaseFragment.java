@@ -1,5 +1,6 @@
 package com.xiefei.mvpstructure.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -21,10 +22,22 @@ public abstract class MvpBaseFragment<P extends MvpPresenter,V extends MvpView> 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(presenter==null)
-            presenter = createPresent();
+//        if(presenter==null) 这个一个BUG 必须创建,因为一旦进入这个流程Context基本是会更新的.®
+
         setRetainInstance(isRetainInstance());
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        presenter = createPresent();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
     //将P与V绑定
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -49,13 +62,12 @@ public abstract class MvpBaseFragment<P extends MvpPresenter,V extends MvpView> 
     }
     @Override
     public void onDetach() {
+        presenter.detachView(isRetainInstance());
         super.onDetach();
     }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        presenter.detachView(isRetainInstance());
-        setRetainInstance(isRetainInstance());
     }
 
     @Override

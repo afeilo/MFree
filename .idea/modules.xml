@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/OpenMusicPlayer.iml" filepath="$PROJECT_DIR$/OpenMusicPlayer.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/circularmusicprogressbar/circularmusicprogressbar.iml" filepath="$PROJECT_DIR$/circularmusicprogressbar/circularmusicprogressbar.iml" />
       <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
       <module fileurl="file://$PROJECT_DIR$/mvpstructure/mvpstructure.iml" filepath="$PROJECT_DIR$/mvpstructure/mvpstructure.iml" />
     </modules>

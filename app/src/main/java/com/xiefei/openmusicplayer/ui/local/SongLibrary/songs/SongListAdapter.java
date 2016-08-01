@@ -35,7 +35,7 @@ public class SongListAdapter extends XRecyclerAdapter<SongInfo> {
     public void bindItemView(XViewHolderHelper holderHelper, SongInfo data, int position) {
         ((TextView)holderHelper.getViewById(R.id.primary_title)).setText(data.getTitle());
         ((TextView)holderHelper.getViewById(R.id.secondary_title)).setText(data.getArtist());
-        Glide.with(context.getApplicationContext()).load(OpenMusicPlayerUtils.getAlbumArtUri(data.getAlbumId())).into((ImageView) holderHelper.getViewById(R.id.image));
+        Glide.with(context).load(OpenMusicPlayerUtils.getAlbumArtUri(data.getAlbumId())).into((ImageView) holderHelper.getViewById(R.id.image));
     }
 
 }

@@ -36,4 +36,5 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.4.0'
     compile project(':mvpstructure')
     compile project(':library')
+    compile project(':circularmusicprogressbar')
 }

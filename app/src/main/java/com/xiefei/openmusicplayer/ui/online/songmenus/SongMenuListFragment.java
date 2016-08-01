@@ -1,5 +1,6 @@
 package com.xiefei.openmusicplayer.ui.online.songmenus;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,8 +16,6 @@ import com.xiefei.openmusicplayer.R;
 import com.xiefei.openmusicplayer.entity.SongMenu;
 import com.xiefei.openmusicplayer.ui.MainActivity;
 import com.xiefei.openmusicplayer.ui.custom.GradDividerItemDecoration;
-import com.xiefei.openmusicplayer.ui.online.songmenus.info.SongMenuInfoActivity;
-
 import java.util.List;
 
 import butterknife.BindView;
@@ -35,6 +34,13 @@ public class SongMenuListFragment extends MvpBaseFragment<SongMenuListPresenter,
     private SongMenuListAdapter adapter;
     private final int PAGE_SIZE = 20;
     private List<SongMenu.ContentBean> songMenuInfos;
+    private MainActivity activity;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        activity = (MainActivity) context;
+    }
 
     @Override
     public int getLayoutRes() {
@@ -48,7 +54,7 @@ public class SongMenuListFragment extends MvpBaseFragment<SongMenuListPresenter,
 
     @Override
     protected boolean isRetainInstance() {
-        return true;
+        return false;
     }
 
 
@@ -114,12 +120,7 @@ public class SongMenuListFragment extends MvpBaseFragment<SongMenuListPresenter,
 
     @Override
     public void onClick(View view, int position) {
-        Intent intent = new Intent(getContext(), SongMenuInfoActivity.class);
         SongMenu.ContentBean contentBean = adapter.getData(position);
-        intent.putExtra(SongMenuInfoActivity.SONG_MENU_ID,contentBean.getListid());
-        intent.putExtra(SongMenuInfoActivity.SONG_MENU_DESC,contentBean.getDesc());
-        intent.putExtra(SongMenuInfoActivity.SONG_MENU_TITLE,contentBean.getTitle());
-        intent.putExtra(SongMenuInfoActivity.SONG_MENU_IMAGE,contentBean.getPic_300());
-        startActivity(intent);
+        activity.openSongMenuInfoFragment(contentBean.getListid(),contentBean.getDesc(),contentBean.getTitle(),contentBean.getPic_300());
     }
 }

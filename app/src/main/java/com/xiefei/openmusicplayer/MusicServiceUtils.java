@@ -90,6 +90,46 @@ public class MusicServiceUtils {
             e.printStackTrace();
         }
     }
+    public static String getTrackName() {
+        try {
+            if(mService!=null)
+                return mService.getTrackName();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static String getArtistName() {
+        try {
+            if(mService!=null)
+                return mService.getArtistName();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static long duration() {
+        try {
+            if(mService!=null)
+                return mService.duration();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    public static long seek(long seek) {
+        try {
+            if(mService!=null)
+                return mService.seek(seek);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+
+
     public static void setPlayList(List<SongInfo> songInfos, int position){
         if(mService != null){
             long[] playList = new long[songInfos.size()];

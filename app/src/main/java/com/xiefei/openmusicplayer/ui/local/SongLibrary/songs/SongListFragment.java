@@ -33,9 +33,7 @@ public class SongListFragment extends BaseLayoutFragment<SongListPresenter,SongL
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("songList",this.toString());
     }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -48,7 +46,7 @@ public class SongListFragment extends BaseLayoutFragment<SongListPresenter,SongL
 
     @Override
     protected boolean isRetainInstance() {
-        return true;
+        return false;
     }
 
     @Override
@@ -99,7 +97,9 @@ public class SongListFragment extends BaseLayoutFragment<SongListPresenter,SongL
         super.onSaveInstanceState(outState);
         if(isRetainInstance()&&adapter!=null){
             songInfos = adapter.getDatas();
+            isFirst = true;
         }
+
     }
 
     @Override

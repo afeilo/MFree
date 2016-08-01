@@ -15,7 +15,6 @@ import android.view.ViewGroup;
  */
 public abstract class BaseFragment extends Fragment{
     private View mContentView;//默认加载的布局
-    private final String Tag = this.getClass().getName();
     protected Boolean isVisible = false;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -29,6 +28,7 @@ public abstract class BaseFragment extends Fragment{
                 parent.removeView(mContentView);
             }
         }
+        checkLazyLoad();
         return mContentView;
     }
 
@@ -40,7 +40,6 @@ public abstract class BaseFragment extends Fragment{
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        Log.d(Tag,"userVisible->"+getUserVisibleHint());
         if(isVisibleToUser) {
             isVisible = true;
             onVisible();
@@ -87,6 +86,5 @@ public abstract class BaseFragment extends Fragment{
     public void onDestroyView() {
         super.onDestroyView();
         ((ViewGroup)mContentView.getParent()).removeView(mContentView);
-        Log.d(Tag,"mContentView.getParent():"+mContentView.getParent());
     }
 }

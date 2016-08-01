@@ -39,6 +39,15 @@ import java.util.Random;
  * 4.记录播放列表
  */
 public class MusicService extends Service implements MusicPlayer{
+    public static final String PLAYSTATE_CHANGED = "com.xiefei.openmusicplay.playstatechanged";
+    public static final String ACTION_KEY = "com.xiefei.openmusicplay.actionkey";//用来取action的key
+    public static final String NEXT = "com.xiefei.openmusicplay.next";
+    public static final String PREV = "com.xiefei.openmusicplay.prev";
+    public static final String PAUSE = "com.xiefei.openmusicplay.pause";
+    public static final String PLAY = "com.xiefei.openmusicplay.play";
+    public static final String STOP = "com.xiefei.openmusicplay.stop";
+    public static final String PLAY_CHANGE = "com.xiefei.openmusicplay.playchange";
+
     private static String Tag = MusicService.class.getName();
     private Binder serviceStub = null;
     //播放列表,保存播放列表id
@@ -110,16 +119,19 @@ public class MusicService extends Service implements MusicPlayer{
 
     @Override
     public void stop() {
+        notifyChange(PLAYSTATE_CHANGED,STOP);
         mediaPlayer.stop();
     }
 
     @Override
     public void pause() {
+        notifyChange(PLAYSTATE_CHANGED,PAUSE);
         mediaPlayer.pause();
     }
 
     @Override
     public void play() {
+        notifyChange(PLAYSTATE_CHANGED,PLAY);
         mediaPlayer.start();
     }
 
@@ -133,6 +145,7 @@ public class MusicService extends Service implements MusicPlayer{
             //TODO 更新成功.
             currentPosition = position;
             mediaPlayer.prepare();
+            notifyChange(PLAYSTATE_CHANGED,PLAY_CHANGE);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -145,6 +158,11 @@ public class MusicService extends Service implements MusicPlayer{
         mCursor = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,mediaProject,selection,null,null);
         mCursor.moveToFirst();
     }
+    private void notifyChange(String action,String actionWhat){
+        Intent intent = new Intent(action);
+        intent.putExtra(ACTION_KEY,actionWhat);
+        sendBroadcast(intent);
+    }
     private Uri getUriById(long id){
         return Uri.withAppendedPath(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, String.valueOf(id));
     }
@@ -152,6 +170,7 @@ public class MusicService extends Service implements MusicPlayer{
     public void prev() {
         int prevPos = getPrev();
         preparePlay(prevPos);
+        notifyChange(PLAYSTATE_CHANGED,PREV);
         play();
     }
 
@@ -164,6 +183,7 @@ public class MusicService extends Service implements MusicPlayer{
     @Override
     public void next() {
         preparePlay(getNext());
+        notifyChange(PLAYSTATE_CHANGED,NEXT);
         play();
     }
     private int getNext(){

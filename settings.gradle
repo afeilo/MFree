@@ -1,1 +1,1 @@
-include ':app', ':mvpstructure', ':library'
+include ':app', ':mvpstructure', ':library', ':circularmusicprogressbar'
