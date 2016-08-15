@@ -78,13 +78,12 @@ public class SongLoader {
         String sectionParam = "is_music=1";
         if(selection!=null)
             sectionParam+=" AND "+selection;
-        Cursor cursor = context.getContentResolver().query
+        return context.getContentResolver().query
                 (MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
                         ,new String[]{MediaStore.Audio.Media._ID,MediaStore.Audio.Media.TITLE,
                                 MediaStore.Audio.Media.ARTIST,MediaStore.Audio.Media.ALBUM,
                                 MediaStore.Audio.Media.DURATION,MediaStore.Audio.Media.DATA,
                                 MediaStore.Audio.Media.ALBUM_ID},
                         sectionParam,selectionArgs,MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
-        return cursor;
     }
 }

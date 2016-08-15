@@ -16,11 +16,6 @@ import com.xiefei.openmusicplayer.loader.AlbumLoader;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
-
 /**
  * Created by xiefei on 16/7/10.
  */
@@ -51,7 +46,7 @@ public class AlbumListPresenter extends MvpBasePresenter<AlbumListView> implemen
     }
 
     @Override
-    public Loader onCreateLoader(int id, Bundle args) {
+    public CursorLoader onCreateLoader(int id, Bundle args) {
         return new CursorLoader(context,MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI
                 ,new String[]{"_id","album","minyear","artist","artist_id","numsongs"}
                 ,null,null,MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
@@ -59,14 +54,13 @@ public class AlbumListPresenter extends MvpBasePresenter<AlbumListView> implemen
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        ArrayList arrayList = new ArrayList();
-        Cursor cursor = data;
-        if ((cursor != null) &&!cursor.isClosed()&& (cursor.moveToFirst()))
+        List arrayList = new ArrayList();
+        if ((data != null) &&!data.isClosed()&& (data.moveToFirst()))
             do {
-                Album album = getAlbumInfo(cursor);
+                Album album = getAlbumInfo(data);
                 arrayList.add(album);
             }
-            while (cursor.moveToNext());
+            while (data.moveToNext());
 //        if (cursor != null)
 //            cursor.close();
         getView().setData(arrayList);

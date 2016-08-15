@@ -1,7 +1,6 @@
 package com.xiefei.openmusicplayer.service;
 
 
-import com.xiefei.openmusicplayer.entity.SongInfo;
 
 /**
  * Created by xiefei on 2016/3/13.

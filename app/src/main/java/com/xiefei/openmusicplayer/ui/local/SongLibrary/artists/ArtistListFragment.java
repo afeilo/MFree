@@ -3,20 +3,14 @@ package com.xiefei.openmusicplayer.ui.local.SongLibrary.artists;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
 import com.xiefei.library.XRecyclerAdapter;
 import com.xiefei.openmusicplayer.R;
 import com.xiefei.openmusicplayer.entity.Artist;
-import com.xiefei.openmusicplayer.entity.SongInfo;
 import com.xiefei.openmusicplayer.ui.MainActivity;
-import com.xiefei.openmusicplayer.ui.custom.DividerItemDecoration;
 import com.xiefei.openmusicplayer.ui.local.SongLibrary.BaseLayoutFragment;
 import com.xiefei.openmusicplayer.ui.custom.GradDividerItemDecoration;
-import com.xiefei.openmusicplayer.ui.local.SongLibrary.songs.SongListAdapter;
-import com.xiefei.openmusicplayer.utils.OpenMusicPlayerUtils;
-
 import java.util.List;
 
 /**

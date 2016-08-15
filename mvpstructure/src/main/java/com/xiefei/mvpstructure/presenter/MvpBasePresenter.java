@@ -14,13 +14,13 @@ public abstract class MvpBasePresenter<V extends MvpView> implements MvpPresente
     private WeakReference<V> weakReference;
     @Override
     public void attachView(V view) {
-        weakReference = new WeakReference<V>(view);
+        weakReference = new WeakReference<>(view);
     }
     public V getView(){
         return weakReference==null?null:weakReference.get();
     }
     public boolean isDetached(){
-        return weakReference==null?false:true;
+        return weakReference != null;
     }
 
     /**
@@ -33,7 +33,7 @@ public abstract class MvpBasePresenter<V extends MvpView> implements MvpPresente
             weakReference.clear();
             weakReference = null;
         }
-        if(retainInstance == false){
+        if(!retainInstance){
             cancel();
         }
     }

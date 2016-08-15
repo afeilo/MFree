@@ -18,8 +18,11 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import com.example.xiefei.openmusicplayer.IMediaPlaybackService;
+import com.xiefei.openmusicplayer.BuildConfig;
 import com.xiefei.openmusicplayer.detail.SongDetailAty;
 import com.xiefei.openmusicplayer.entity.SongInfo;
+import com.xiefei.openmusicplayer.service.helper.LoadMusicCallBack;
+import com.xiefei.openmusicplayer.service.helper.MusicHelper;
 import com.xiefei.openmusicplayer.utils.Constant;
 
 import java.io.IOException;
@@ -38,7 +41,7 @@ import java.util.Random;
  * 3.初始化 相当于CD播放器内内置了一张CD光盘（默认是上一次关闭播放器时的播放列表）
  * 4.记录播放列表
  */
-public class MusicService extends Service implements MusicPlayer{
+public class MusicService extends Service implements LoadMusicCallBack{
     public static final String PLAYSTATE_CHANGED = "com.xiefei.openmusicplay.playstatechanged";
     public static final String ACTION_KEY = "com.xiefei.openmusicplay.actionkey";//用来取action的key
     public static final String NEXT = "com.xiefei.openmusicplay.next";
@@ -47,39 +50,34 @@ public class MusicService extends Service implements MusicPlayer{
     public static final String PLAY = "com.xiefei.openmusicplay.play";
     public static final String STOP = "com.xiefei.openmusicplay.stop";
     public static final String PLAY_CHANGE = "com.xiefei.openmusicplay.playchange";
+    public static final String PLAY_LOADING = "com.xiefei.openmusicplay.playloading";//歌曲加载中
 
-    private static String Tag = MusicService.class.getName();
+    private static final String Tag = "MusicService";
+    private static final boolean DEBUG = BuildConfig.DEBUG;
+    private MusicHelper musicHelper;
     private Binder serviceStub = null;
     //播放列表,保存播放列表id
     private long playList[];
     private MediaPlayer mediaPlayer;
     private int currentPosition;
-    private Cursor mCursor;//取出当前播放曲目的信息
-
-    String mediaProject[] = new String[]{MediaStore.Audio.Media._ID,MediaStore.Audio.Media.TITLE,
-            MediaStore.Audio.Media.ARTIST,MediaStore.Audio.Media.ALBUM,
-            MediaStore.Audio.Media.DURATION,MediaStore.Audio.Media.DATA,
-            MediaStore.Audio.Media.ALBUM_ID};
-    private static final int titleIndex = 1;
-    private static final int artistIndex = 2;
-    private static final int albumIndex = 3;
-    private static final int durationIndex = 4;
-    private static final int dataIndex = 5;
-    private static final int albumIdndex = 6;
+    private ServiceMusicEntity currentMusicEntity;//取出当前播放曲目的信息
+    private int onlineTag = 0;
     @Override
     public void onCreate() {
         super.onCreate();
         mediaPlayer = new MediaPlayer();
         serviceStub = new ServiceStub(this);
+        musicHelper = new MusicHelper(this);
     }
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
+        if(DEBUG)
+            Log.d(Tag,serviceStub.toString());
         return serviceStub;
     }
 
-    @Override
     public void openFile(String path) {
         mediaPlayer.reset();
         try {
@@ -90,9 +88,15 @@ public class MusicService extends Service implements MusicPlayer{
         }
     }
 
-    @Override
-    public void open(long[] list, int position) {
+    /**
+     *
+     * @param list ids
+     * @param position 表示当前内容出于的位置
+     * @param onlineTag 表示获取该id的数据库.参考值MusicHelper
+     */
+    public void open(long[] list, int position,int onlineTag) {
         currentPosition = position;
+        this.onlineTag = onlineTag;
         if(playList !=null && playList.length == list.length){
             for (int i = 0; i < list.length; i++) {
                 if(playList[i]!=list[i])
@@ -107,71 +111,48 @@ public class MusicService extends Service implements MusicPlayer{
         preparePlay(position);
     }
 
-    @Override
     public int getQueuePosition() {
         return currentPosition;
     }
 
-    @Override
     public boolean isPlaying() {
         return mediaPlayer.isPlaying();
     }
 
-    @Override
     public void stop() {
         notifyChange(PLAYSTATE_CHANGED,STOP);
         mediaPlayer.stop();
     }
 
-    @Override
     public void pause() {
         notifyChange(PLAYSTATE_CHANGED,PAUSE);
         mediaPlayer.pause();
     }
 
-    @Override
     public void play() {
         notifyChange(PLAYSTATE_CHANGED,PLAY);
         mediaPlayer.start();
     }
 
     private void preparePlay(int position){
-        try {
-            mediaPlayer.reset();
-            Uri uri = getUriById(playList[position]);
-            Log.d(Tag,uri.toString());
-            mediaPlayer.setDataSource(this,uri);
-            updateMediaCursor(MediaStore.Audio.Media._ID +"="+playList[position]);
-            //TODO 更新成功.
-            currentPosition = position;
-            mediaPlayer.prepare();
-            notifyChange(PLAYSTATE_CHANGED,PLAY_CHANGE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        mediaPlayer.reset();
+        currentPosition = position;
+        notifyChange(PLAYSTATE_CHANGED,PLAY_LOADING);
+        musicHelper.getMessageById(String.valueOf(playList[position]),onlineTag,this);
     }
-    private void updateMediaCursor(String selection){
-        if(mCursor != null){
-            mCursor.close();
-            mCursor = null;
-        }
-        mCursor = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,mediaProject,selection,null,null);
-        mCursor.moveToFirst();
-    }
+
     private void notifyChange(String action,String actionWhat){
         Intent intent = new Intent(action);
         intent.putExtra(ACTION_KEY,actionWhat);
         sendBroadcast(intent);
     }
-    private Uri getUriById(long id){
-        return Uri.withAppendedPath(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, String.valueOf(id));
-    }
-    @Override
+//    private Uri getUriById(long id){
+//        return Uri.withAppendedPath(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, String.valueOf(id));
+//    }
     public void prev() {
         int prevPos = getPrev();
         preparePlay(prevPos);
         notifyChange(PLAYSTATE_CHANGED,PREV);
-        play();
     }
 
     private int getPrev(){
@@ -180,11 +161,9 @@ public class MusicService extends Service implements MusicPlayer{
             index = playList.length -1;
         return index;
     }
-    @Override
     public void next() {
         preparePlay(getNext());
         notifyChange(PLAYSTATE_CHANGED,NEXT);
-        play();
     }
     private int getNext(){
         int index = currentPosition + 1;
@@ -192,113 +171,91 @@ public class MusicService extends Service implements MusicPlayer{
             index = 0;
         return index;
     }
-    @Override
     public long duration() {
         return mediaPlayer.getDuration();
     }
 
-    @Override
     public long position() {
         return currentPosition;
     }
 
-    @Override
     public long seek(long pos) {
         mediaPlayer.seekTo((int) pos);
         return pos;
     }
 
-    @Override
     public String getTrackName() {
-        return mCursor.getString(titleIndex);
+        return currentMusicEntity.getTitle();
     }
 
-    @Override
     public String getAlbumName() {
-        return mCursor.getString(albumIndex);
+        return currentMusicEntity.getAlbum();
     }
 
-    @Override
     public long getAlbumId() {
-        return mCursor.getLong(albumIdndex);
+        return currentMusicEntity.getId();
     }
 
-    @Override
     public String getArtistName() {
-        return mCursor.getString(artistIndex);
+        return currentMusicEntity.getArtist();
     }
 
-    @Override
     public long getArtistId() {
         return 0;
     }
 
-    @Override
     public void enqueue(long[] list, int action) {
 
     }
 
-    @Override
     public long[] getQueue() {
         return playList;
     }
 
-    @Override
     public void moveQueueItem(int from, int to) {
 
     }
 
-    @Override
     public void setQueuePosition(int index) {
 
     }
 
-    @Override
     public String getPath() {
-        return mCursor.getString(dataIndex);
+        return currentMusicEntity.getUrl();
     }
 
-    @Override
     public long getAudioId() {
         return 0;
     }
 
-    @Override
     public void setShuffleMode(int shufflemode) {
 
     }
 
-    @Override
     public int getShuffleMode() {
         return 0;
     }
 
-    @Override
     public int removeTracks(int first, int last) {
         return 0;
     }
 
-    @Override
     public int removeTrack(long id) {
         return 0;
     }
 
-    @Override
     public void setRepeatMode(int repeatmode) {
 
     }
 
-    @Override
     public int getRepeatMode() {
         return 0;
     }
 
-    @Override
     public int getMediaMountedCount() {
         return 0;
     }
 
-    @Override
     public int getAudioSessionId() {
         return 0;
     }
@@ -306,10 +263,29 @@ public class MusicService extends Service implements MusicPlayer{
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mCursor!=null){
-            mCursor.close();
-            mCursor = null;
+    }
+
+    @Override
+    public void loadSuccess(ServiceMusicEntity entity) {
+        currentMusicEntity = entity;
+        String uri = entity.getUrl();
+        if(DEBUG)
+            Log.d(Tag,uri.toString());
+        try {
+            mediaPlayer.setDataSource(this,Uri.parse(uri));
+            //TODO 更新成功.
+            mediaPlayer.prepare();
+            notifyChange(PLAYSTATE_CHANGED,PLAY_CHANGE);
+            play();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+    }
+
+    @Override
+    public void loadFail(Throwable e) {
+
     }
 
     //继承IMediaPlaybackService.Stub
@@ -327,8 +303,8 @@ public class MusicService extends Service implements MusicPlayer{
         }
 
         @Override
-        public void open(long[] list, int position) throws RemoteException {
-            ((MusicService)weakReference.get()).open(list,position);
+        public void open(long[] list, int position,int onlineTag) throws RemoteException {
+            ((MusicService)weakReference.get()).open(list,position,onlineTag);
         }
 
         @Override

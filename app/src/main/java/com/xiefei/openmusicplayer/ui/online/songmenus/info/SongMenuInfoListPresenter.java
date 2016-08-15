@@ -37,9 +37,9 @@ public class SongMenuInfoListPresenter extends MvpBasePresenter<SongMenuInfoList
             @Override
             public List<SongMenuInfo.ContentBean> call(SongMenuInfo songMenuInfo) {
                 List<SongMenuInfo.ContentBean> contentBeans = songMenuInfo.getContent();
-                for (int i = 0; i <contentBeans.size(); i++) {
-                    contentBeans.get(i).setSongUrl(BaiduUtils.getUrlById(contentBeans.get(i).getSong_id()));
-                }
+//                for (int i = 0; i <contentBeans.size(); i++) {
+//                    contentBeans.get(i).setSongUrl(BaiduUtils.getUrlById(contentBeans.get(i).getSong_id()));
+//                }
                 return contentBeans;
             }
         });

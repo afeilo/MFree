@@ -3,11 +3,8 @@ package com.xiefei.openmusicplayer.API;
 import com.xiefei.openmusicplayer.entity.SongMenu;
 import com.xiefei.openmusicplayer.entity.SongMenuInfo;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 

@@ -1,17 +1,10 @@
 package com.xiefei.openmusicplayer.loader;
 
-import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.content.CursorLoader;
-
 import com.xiefei.openmusicplayer.entity.Album;
-import com.xiefei.openmusicplayer.entity.Album;
-import com.xiefei.openmusicplayer.entity.SongInfo;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,10 +64,9 @@ public class AlbumLoader{
     }
 
     protected Cursor getCursor(String selection, String[] selectionArgs){
-        Cursor cursor = context.getContentResolver().query
+        return context.getContentResolver().query
                 (MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI
                         ,new String[]{"_id","album","minyear","artist","artist_id","numsongs"}
                         ,selection,selectionArgs,MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
-        return cursor;
     }
 }

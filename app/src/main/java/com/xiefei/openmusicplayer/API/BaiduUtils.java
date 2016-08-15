@@ -9,19 +9,13 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.functions.Func1;
 
 /**
  * Created by xiefei on 16/7/24.
  */
 public class BaiduUtils {
-    private static String Tag = "OnlineMusicUtil";
-//    public static Observable<String> getMusicLrc(final String musicName,final String artistName){
+    //    public static Observable<String> getMusicLrc(final String musicName,final String artistName){
 //        return Observable.create(new Observable.OnSubscribe<String>() {
 //            @Override
 //            public void call(Subscriber<? super String> subscriber) {
@@ -42,9 +36,10 @@ public class BaiduUtils {
     public static String getUrlById(String id){
         String resultUrl = null;
         String urls = "http://tingapi.ting.baidu.com/v1/restserver/ting?from=webapp_music&method=baidu.ting.song.downWeb&songid="+id+"&bit=24,%2064,%20128,%20192,%20256,%20320,%20flac";
+        HttpURLConnection connection = null;
         try {
             URL url = new URL(urls);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection = (HttpURLConnection) url.openConnection();
             connection.setReadTimeout(5000);
             connection.connect();
             InputStream inputStream = connection.getInputStream();
@@ -67,15 +62,18 @@ public class BaiduUtils {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            if(connection!=null)
+                connection.disconnect();
         }
         return resultUrl;
     }
     public static String getLrcById(String id){
         String resultUrl = null;
         String urls = "http://tingapi.ting.baidu.com/v1/restserver/ting?from=webapp_music&method=baidu.ting.song.downWeb&songid="+id+"&bit=24,%2064,%20128,%20192,%20256,%20320,%20flac";
+        HttpURLConnection connection = null;
         try {
             URL url = new URL(urls);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection = (HttpURLConnection) url.openConnection();
             connection.setReadTimeout(5000);
             connection.connect();
             InputStream inputStream = connection.getInputStream();
@@ -96,16 +94,18 @@ public class BaiduUtils {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            if (connection!=null)
+                connection.disconnect();
         }
         return resultUrl;
     }
     private static String getIdByKey(String musicName,String artistName){
         String resultUrl = null;
         String urls = "http://tingapi.ting.baidu.com/v1/restserver/ting?from=webapp_music&method=baidu.ting.search.catalogSug&query="+ URLEncoder.encode(musicName);
-        Log.d(Tag,urls);
+        HttpURLConnection connection = null;
         try {
             URL url = new URL(urls);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection = (HttpURLConnection) url.openConnection();
             connection.setReadTimeout(5000);
             connection.connect();
             InputStream inputStream = connection.getInputStream();
@@ -117,7 +117,8 @@ public class BaiduUtils {
                     sb.append(new String(bytes,0,len));
                 }
                 String s = sb.toString();
-                Log.d(Tag,s);
+                String tag = "OnlineMusicUtil";
+                Log.d(tag,s);
                 JSONObject jsonObject = new JSONObject(s);
                 if(jsonObject.has("song")){
                     JSONArray jsonArray = jsonObject.getJSONArray("song");
@@ -134,6 +135,8 @@ public class BaiduUtils {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            if (connection!=null)
+                connection.disconnect();
         }
         return resultUrl;
     }

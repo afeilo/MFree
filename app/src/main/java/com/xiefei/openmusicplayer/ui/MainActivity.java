@@ -158,10 +158,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
-//    @OnClick(R.id.play_bar)
-//    void pressPlayBar(View v) {
-//        startActivity(new Intent(this,NowPlayingActivity.class));
-//    }
+    @OnClick(R.id.play_bar)
+    void pressPlayBar(View v) {
+        startActivity(new Intent(this,NowPlayingActivity.class));
+    }
 
     public void openFilterFilterSongFragment(String title, String image, String selection) {
         if (filterFilterSongFragment == null)

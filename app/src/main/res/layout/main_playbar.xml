@@ -4,16 +4,18 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:id="@+id/play_bar"
+    android:layout_gravity="bottom"
     android:background="@color/music_bar_bg"
     android:orientation="vertical">
     <ProgressBar
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:id="@+id/main_progressbar"
+        android:layout_gravity="left"
         style="?android:attr/progressBarStyleHorizontal"
         android:progressDrawable="@drawable/seekbar_bg"
-        android:max="10000"
-        />
+        android:max="10000"/>
+        <!--/>-->
     <LinearLayout
         android:orientation="horizontal" android:layout_width="match_parent"
         android:padding="@dimen/player_bar_padding"
@@ -24,7 +26,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:alpha="0.4"
-            android:src="@mipmap/hum_search_circle"/>
+            android:src="@drawable/hum_search_circle"/>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -54,7 +56,7 @@
             android:layout_height="24dp"
             android:layout_marginLeft="@dimen/player_bar_padding"
             android:background="@android:color/transparent"
-            android:src="@mipmap/icon_bottom_play_bar_next_normal"
+            android:src="@drawable/icon_bottom_play_bar_next_normal"
             android:id="@+id/main_next"
             />
     </LinearLayout>

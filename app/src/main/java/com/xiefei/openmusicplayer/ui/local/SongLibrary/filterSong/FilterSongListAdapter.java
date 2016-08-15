@@ -1,11 +1,8 @@
-package com.xiefei.openmusicplayer.ui.local.SongLibrary.songs;
+package com.xiefei.openmusicplayer.ui.local.SongLibrary.filterSong;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,20 +11,15 @@ import com.xiefei.library.XRecyclerAdapter;
 import com.xiefei.library.XViewHolderHelper;
 import com.xiefei.openmusicplayer.R;
 import com.xiefei.openmusicplayer.entity.SongInfo;
+import com.xiefei.openmusicplayer.entity.SongMenuInfo;
 import com.xiefei.openmusicplayer.utils.OpenMusicPlayerUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by xiefei on 16/7/10.
  */
-public class SongListAdapter extends XRecyclerAdapter<SongInfo> {
+public class FilterSongListAdapter extends XRecyclerAdapter<SongInfo>{
 
-    public SongListAdapter(Context context, @LayoutRes int layoutId) {
+    public FilterSongListAdapter(Context context, @LayoutRes int layoutId) {
         super(context, layoutId);
     }
 

@@ -62,6 +62,7 @@ public abstract class MvpBaseFragment<P extends MvpPresenter,V extends MvpView> 
     }
     @Override
     public void onDetach() {
+        isAttatch = false;
         presenter.detachView(isRetainInstance());
         super.onDetach();
     }

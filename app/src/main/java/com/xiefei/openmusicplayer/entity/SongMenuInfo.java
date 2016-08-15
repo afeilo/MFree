@@ -185,7 +185,7 @@ public class SongMenuInfo {
 
     public static class ContentBean {
         private String title;
-        private String song_id;
+        private Long song_id;
         private String author;
         private String album_id;
         private String album_title;
@@ -231,11 +231,11 @@ public class SongMenuInfo {
             this.title = title;
         }
 
-        public String getSong_id() {
+        public Long getSong_id() {
             return song_id;
         }
 
-        public void setSong_id(String song_id) {
+        public void setSong_id(Long song_id) {
             this.song_id = song_id;
         }
 

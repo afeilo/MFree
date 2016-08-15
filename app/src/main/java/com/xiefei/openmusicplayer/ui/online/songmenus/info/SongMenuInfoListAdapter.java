@@ -40,7 +40,7 @@ public class SongMenuInfoListAdapter extends XRecyclerAdapter<SongMenuInfo.Conte
     public void bindItemView(final XViewHolderHelper holderHelper, SongMenuInfo.ContentBean data, final int position) {
         ((TextView)holderHelper.getViewById(R.id.primary_title)).setText(data.getTitle());
         ((TextView)holderHelper.getViewById(R.id.secondary_title)).setText(data.getAuthor());
-        ((ImageView)holderHelper.getViewById(R.id.image)).setImageResource(R.mipmap.songmenu_item);
+        ((ImageView)holderHelper.getViewById(R.id.image)).setImageResource(R.drawable.songmenu_item);
         if(onItemClickListener!=null)
         holderHelper.getHoldView().setOnClickListener(new View.OnClickListener() {
             @Override

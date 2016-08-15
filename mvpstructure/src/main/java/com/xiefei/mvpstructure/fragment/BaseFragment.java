@@ -15,7 +15,8 @@ import android.view.ViewGroup;
  */
 public abstract class BaseFragment extends Fragment{
     private View mContentView;//默认加载的布局
-    protected Boolean isVisible = false;
+    protected boolean isVisible = false;
+    private boolean isFirst = true;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // 避免多次从xml中加载布局文件
@@ -55,10 +56,24 @@ public abstract class BaseFragment extends Fragment{
 
     protected void checkLazyLoad() {
         if(mContentView!=null&&getUserVisibleHint()){
-            lazyLoad();
+            if(isFirst){
+                lazyLoad();
+                isFirst = false;
+            }else {
+                lazyRefresh();
+            }
         }
     }
+
+    /**
+     * 用于界面第一次出现懒加载,一半用于对控件需要的adpter进行初始化或get数据
+     */
     protected  void lazyLoad(){}
+
+    /**
+     * 针对每次界面出现都必须刷新的情况
+     */
+    protected  void lazyRefresh(){}
     /**
      * 初始化View(第一次初始化时候才会调用,注意一般该方法只用户绑定View)
      * @param contentView
@@ -86,5 +101,6 @@ public abstract class BaseFragment extends Fragment{
     public void onDestroyView() {
         super.onDestroyView();
         ((ViewGroup)mContentView.getParent()).removeView(mContentView);
+        isFirst = true;
     }
 }

@@ -25,7 +25,7 @@ public class FragmentControl {
     }
     public boolean add(@IdRes int id, Class clazz){
         if(lastTag!=null)
-            if(clazz.getName()==lastTag)
+            if(clazz.getName().equals(lastTag))
                 return true;
         FragmentTransaction transaction = manager.beginTransaction();
         Fragment fragment = manager.findFragmentByTag(clazz.getName());

@@ -8,12 +8,17 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.example.xiefei.openmusicplayer.IMediaPlaybackService;
 import com.xiefei.openmusicplayer.entity.SongInfo;
+import com.xiefei.openmusicplayer.entity.SongMenu;
+import com.xiefei.openmusicplayer.entity.SongMenuInfo;
 import com.xiefei.openmusicplayer.service.MusicService;
+import com.xiefei.openmusicplayer.service.helper.MusicHelper;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -24,6 +29,7 @@ import java.util.WeakHashMap;
  * Created by xiefei on 16/7/23.
  */
 public class MusicServiceUtils {
+    private static final String Tag = "MusicServiceUtils";
     private static WeakHashMap<ContextWrapper,ServiceBinder> serviceWeakHashMap;
     private static IMediaPlaybackService mService;
     static{
@@ -128,22 +134,36 @@ public class MusicServiceUtils {
         return 0;
     }
 
-
-
     public static void setPlayList(List<SongInfo> songInfos, int position){
+        setPlayList(songInfos,position, MusicHelper.local);
+    }
+
+    public static void setPlayList(List<SongInfo> songInfos, int position,int onlineTag){
         if(mService != null){
             long[] playList = new long[songInfos.size()];
             for (int i = 0; i < songInfos.size(); i++) {
                 playList[i] = songInfos.get(i).getId();
             }
             try {
-                mService.open(playList,position);
+                mService.open(playList,position,onlineTag);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
         }
     }
-
+    public static void setOnlinePlayList(List<SongMenuInfo.ContentBean> ContentBeans, int position, int onlineTag){
+        if(mService != null){
+            long[] playList = new long[ContentBeans.size()];
+            for (int i = 0; i < ContentBeans.size(); i++) {
+                playList[i] = ContentBeans.get(i).getSong_id();
+            }
+            try {
+                mService.open(playList,position,onlineTag);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     public static void openFile(String path) {
         if(mService!=null){
             try {
@@ -176,6 +196,7 @@ public class MusicServiceUtils {
         }
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.d(Tag,service.toString());
             if(callback!=null)
                 callback.onServiceConnected(name, service);
             if(mService==null)

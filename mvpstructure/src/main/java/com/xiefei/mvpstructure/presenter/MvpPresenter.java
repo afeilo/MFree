@@ -10,9 +10,9 @@ public interface MvpPresenter<V extends MvpView> {
     /*
     将MvpView与该Presenter进行绑定
      */
-    public void attachView(V view);
+    void attachView(V view);
     /*
     当destroyed时调用，
      */
-    public void detachView(boolean retainInstance);
+    void detachView(boolean retainInstance);
 }

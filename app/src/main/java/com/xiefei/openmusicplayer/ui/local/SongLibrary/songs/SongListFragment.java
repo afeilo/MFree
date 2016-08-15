@@ -105,6 +105,6 @@ public class SongListFragment extends BaseLayoutFragment<SongListPresenter,SongL
     @Override
     public void onClick(View view, int position) {
         MusicServiceUtils.setPlayList(adapter.getDatas(),position);
-        MusicServiceUtils.play();
+//        MusicServiceUtils.play();
     }
 }

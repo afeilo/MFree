@@ -66,10 +66,9 @@ public class ArtistLoader {
     }
 
     protected Cursor getCursor(String selection, String[] selectionArgs){
-        Cursor cursor = context.getContentResolver().query
+        return context.getContentResolver().query
                 (MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI
                         ,new String[]{"_id","artist","number_of_albums","number_of_tracks"}
                         ,selection,selectionArgs,MediaStore.Audio.Artists.DEFAULT_SORT_ORDER);
-        return cursor;
     }
 }
