@@ -1,4 +1,4 @@
-package com.xiefei.openmusicplayer.ui.custom;
+package com.xiefei.openmusicplayer.ui.widget;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -24,7 +24,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration{
     public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
         for(int i = 0;i < parent.getChildCount();i++){
             View v = parent.getChildAt(i);
-            c.drawRect(0,v.getBottom(),v.getWidth(),v.getBottom()+divideHeight,paint);
+            c.drawRect(v.getLeft(),v.getTop(),v.getRight(),v.getTop()+divideHeight,paint);
         }
 
     }

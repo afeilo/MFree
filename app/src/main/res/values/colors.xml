@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#1F1924</color>
-    <color name="colorPrimaryDark">#1F1924</color>
+    <color name="colorPrimary">#fe5339 </color>
+    <color name="colorPrimaryDark">#fe5339</color>
     <color name="colorAccent">#80D0CD</color>
 
     <color name="seekbar_bg">#40537167</color>
     <color name="seekbar_progress_bg">#99ffffff</color>
-    <color name="play_bar_article_color">#99ffffff</color>
+    <color name="play_bar_article_color">#99000000</color>
 
-    <color name="music_bar_bg">#cc000000</color>
+    <color name="music_bar_bg">#ffffff</color>
+    <color name="window_background">#f2f2f2</color>
+    <color name="appbar_color">#fe5339</color>
+
+    <color name="divider_color">#D7D7D7</color>
+    <color name="statusBar">#30ffffff</color>
+    <color name="now_playing_artist_color">#99ffffff</color>
 </resources>

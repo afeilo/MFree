@@ -26,6 +26,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:alpha="0.4"
+            android:tint="@color/appbar_color"
             android:src="@drawable/hum_search_circle"/>
         <LinearLayout
             android:layout_width="0dp"
@@ -36,7 +37,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/black"
                 android:id="@+id/main_song_title"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -48,6 +49,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:background="@android:color/transparent"
+            android:tint="@color/appbar_color"
             android:src="@drawable/icon_music_play"
             android:id="@+id/main_play"
             />
@@ -55,6 +57,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginLeft="@dimen/player_bar_padding"
+            android:tint="@color/appbar_color"
             android:background="@android:color/transparent"
             android:src="@drawable/icon_bottom_play_bar_next_normal"
             android:id="@+id/main_next"

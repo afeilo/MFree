@@ -1,4 +1,4 @@
-package com.xiefei.openmusicplayer.ui.custom;
+package com.xiefei.openmusicplayer.ui.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;

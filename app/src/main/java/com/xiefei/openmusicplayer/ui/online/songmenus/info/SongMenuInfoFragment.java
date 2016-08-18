@@ -2,30 +2,25 @@ package com.xiefei.openmusicplayer.ui.online.songmenus.info;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.xiefei.library.XRecyclerAdapter;
-import com.xiefei.mvpstructure.fragment.MvpBaseActivity;
 import com.xiefei.mvpstructure.fragment.MvpBaseFragment;
 import com.xiefei.openmusicplayer.MusicServiceUtils;
 import com.xiefei.openmusicplayer.R;
 import com.xiefei.openmusicplayer.entity.SongMenuInfo;
 import com.xiefei.openmusicplayer.service.helper.MusicHelper;
 import com.xiefei.openmusicplayer.ui.MainActivity;
-import com.xiefei.openmusicplayer.ui.custom.DividerItemDecoration;
+import com.xiefei.openmusicplayer.ui.widget.DividerItemDecoration;
 
 import java.util.List;
 

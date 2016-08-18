@@ -10,7 +10,7 @@ import com.xiefei.openmusicplayer.R;
 import com.xiefei.openmusicplayer.entity.Artist;
 import com.xiefei.openmusicplayer.ui.MainActivity;
 import com.xiefei.openmusicplayer.ui.local.SongLibrary.BaseLayoutFragment;
-import com.xiefei.openmusicplayer.ui.custom.GradDividerItemDecoration;
+import com.xiefei.openmusicplayer.ui.widget.GradDividerItemDecoration;
 import java.util.List;
 
 /**

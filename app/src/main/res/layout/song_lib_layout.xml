@@ -4,11 +4,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     >
-    <android.support.design.widget.AppBarLayout
+    <com.xiefei.openmusicplayer.ui.widget.CompatAppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay"
+
         >
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -23,7 +26,7 @@
             android:id="@+id/tab">
         </android.support.design.widget.TabLayout>
 
-    </android.support.design.widget.AppBarLayout>
+    </com.xiefei.openmusicplayer.ui.widget.CompatAppBarLayout>
     <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"

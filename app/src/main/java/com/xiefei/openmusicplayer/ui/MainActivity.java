@@ -126,9 +126,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void popBackStack() {
-        if (filterFilterSongFragment != null & !filterFilterSongFragment.isHidden())
+        if (filterFilterSongFragment != null && filterFilterSongFragment.isVisible())
             filterFilterSongFragment.getFragmentManager().popBackStack();
-        if (songMenuInfoFragment != null && !songMenuInfoFragment.isHidden())
+        if (songMenuInfoFragment != null && songMenuInfoFragment.isVisible())
             songMenuInfoFragment.getFragmentManager().popBackStack();
     }
 

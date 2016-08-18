@@ -1,34 +1,23 @@
 package com.xiefei.openmusicplayer.service;
 
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import com.example.xiefei.openmusicplayer.IMediaPlaybackService;
 import com.xiefei.openmusicplayer.BuildConfig;
-import com.xiefei.openmusicplayer.detail.SongDetailAty;
-import com.xiefei.openmusicplayer.entity.SongInfo;
+import com.xiefei.openmusicplayer.ui.detail.SongDetailAty;
 import com.xiefei.openmusicplayer.service.helper.LoadMusicCallBack;
 import com.xiefei.openmusicplayer.service.helper.MusicHelper;
-import com.xiefei.openmusicplayer.utils.Constant;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Created by xiefei-pc on 2016/1/24.

@@ -3,6 +3,7 @@ package com.xiefei.openmusicplayer.ui.local.SongLibrary;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +21,7 @@ import com.xiefei.openmusicplayer.ui.MainActivity;
 import com.xiefei.openmusicplayer.ui.local.SongLibrary.album.AlbumListFragment;
 import com.xiefei.openmusicplayer.ui.local.SongLibrary.artists.ArtistListFragment;
 import com.xiefei.openmusicplayer.ui.local.SongLibrary.songs.SongListFragment;
+import com.xiefei.openmusicplayer.utils.MDStatusBarCompat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,7 +57,7 @@ public class SongLibFragment extends BaseFragment {
     protected void initView(View contentView) {
 
         ButterKnife.bind(this, contentView);
-        bindToolbar();
+        bindToolbar(contentView);
 //        viewPager = getViewById(R.id.view_pager);
         mTabTitles = new String[TAB_COUNT];
         mTabTitles[TAB_INDEX_SONG] = getResources().getString(R.string.song);
@@ -75,8 +77,7 @@ public class SongLibFragment extends BaseFragment {
     protected int getLayoutRes() {
         return R.layout.song_lib_layout;
     }
-
-    private void bindToolbar() {
+    private void bindToolbar(View contentView) {
         MainActivity activity =  ((MainActivity)getActivity());
         activity.setSupportActionBar(toolbar);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(activity,activity.drawerLayout
@@ -84,6 +85,7 @@ public class SongLibFragment extends BaseFragment {
         drawerToggle.syncState();
         activity.getSupportActionBar().setTitle(getResources().getString(R.string.local_song_lib));
         activity.drawerLayout.addDrawerListener(drawerToggle);
+//        MDStatusBarCompat.setDrawerToolbarTabLayout(getActivity(), (CoordinatorLayout) contentView);
     }
 
     class OpenViewPager extends FragmentPagerAdapter {

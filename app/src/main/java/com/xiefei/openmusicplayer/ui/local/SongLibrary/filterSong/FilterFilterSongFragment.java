@@ -6,12 +6,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -21,9 +19,9 @@ import com.xiefei.mvpstructure.fragment.MvpBaseFragment;
 import com.xiefei.openmusicplayer.MusicServiceUtils;
 import com.xiefei.openmusicplayer.R;
 import com.xiefei.openmusicplayer.entity.SongInfo;
-import com.xiefei.openmusicplayer.entity.SongMenuInfo;
 import com.xiefei.openmusicplayer.ui.MainActivity;
-import com.xiefei.openmusicplayer.ui.custom.DividerItemDecoration;
+import com.xiefei.openmusicplayer.ui.widget.DividerItemDecoration;
+import com.xiefei.openmusicplayer.utils.MDStatusBarCompat;
 
 import java.util.List;
 
@@ -135,6 +133,8 @@ public class FilterFilterSongFragment extends MvpBaseFragment<FilterSongListPres
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         listContent.setLayoutManager(new LinearLayoutManager(getContext()));
         listContent.addItemDecoration(new DividerItemDecoration(Color.BLACK,1));
+//        MDStatusBarCompat.setImageTranslucent(getActivity());
+//        MDStatusBarCompat.setCollapsingToolbar(getActivity(), (CoordinatorLayout) contentView,appBarLayout,imageView,toolbar);
     }
 
     @Override

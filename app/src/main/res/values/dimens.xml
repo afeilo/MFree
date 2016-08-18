@@ -11,4 +11,6 @@
     <dimen name="song_list_item_image_size">48dp</dimen>
 
     <dimen name="player_bar_padding">12dp</dimen>
+    <dimen name="card_view_elevation">1dp</dimen>
+
 </resources>

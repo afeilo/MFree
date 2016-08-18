@@ -6,10 +6,12 @@ android {
 
     defaultConfig {
         applicationId "com.example.xiefei.openmusicplayer"
-        minSdkVersion 15
+        minSdkVersion 19
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
+        renderscriptTargetApi 20
+        renderscriptSupportModeEnabled true
     }
     buildTypes {
         release {

@@ -1,4 +1,4 @@
-package com.xiefei.openmusicplayer.ui.custom;
+package com.xiefei.openmusicplayer.ui.widget;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -29,20 +29,20 @@ public class GradDividerItemDecoration extends RecyclerView.ItemDecoration{
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         int left = 0,top = 0,right = 0,bottom = 0;
-        if(parent.getChildLayoutPosition(view)<horizontalCount)
-            top = divideHeight;
+//        if(parent.getChildLayoutPosition(view)<horizontalCount)
+//            top = 0;
         if(parent.getChildLayoutPosition(view)%horizontalCount == 0){
-            left = divideHeight;
+//            left = divideHeight;
             right = divideHeight/2;
             bottom = divideHeight;
         }else if(parent.getChildLayoutPosition(view)%horizontalCount == horizontalCount-1){
             left = divideHeight/2;
-            right = divideHeight;
+//            right = divideHeight;
             bottom = divideHeight;
         }else {
             left = divideHeight /2;
             right = divideHeight /2;
-            bottom = divideHeight;
+//            bottom = divideHeight;
         }
         outRect.set(left,top,right,bottom);
     }

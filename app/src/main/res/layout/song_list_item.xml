@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/activity_horizontal_margin_small">
+    android:paddingTop="@dimen/activity_horizontal_margin_small"
+    android:paddingBottom="@dimen/activity_horizontal_margin_small">
     <ImageView
         android:layout_width="@dimen/song_list_item_image_size"
         android:layout_height="@dimen/song_list_item_image_size"

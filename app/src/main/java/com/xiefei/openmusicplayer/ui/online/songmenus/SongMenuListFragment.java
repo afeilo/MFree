@@ -1,7 +1,6 @@
 package com.xiefei.openmusicplayer.ui.online.songmenus;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,7 +14,7 @@ import com.xiefei.mvpstructure.fragment.MvpBaseFragment;
 import com.xiefei.openmusicplayer.R;
 import com.xiefei.openmusicplayer.entity.SongMenu;
 import com.xiefei.openmusicplayer.ui.MainActivity;
-import com.xiefei.openmusicplayer.ui.custom.GradDividerItemDecoration;
+import com.xiefei.openmusicplayer.ui.widget.GradDividerItemDecoration;
 import java.util.List;
 
 import butterknife.BindView;
