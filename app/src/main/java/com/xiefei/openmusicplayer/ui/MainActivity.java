@@ -3,18 +3,18 @@ package com.xiefei.openmusicplayer.ui;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
-import android.os.RemoteException;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,11 +23,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.xiefei.library.XRecyclerAdapter;
+import com.bumptech.glide.Glide;
 import com.xiefei.openmusicplayer.BaseActivity;
 import com.xiefei.openmusicplayer.MusicServiceUtils;
 import com.xiefei.openmusicplayer.R;
-import com.xiefei.openmusicplayer.entity.SongInfo;
 import com.xiefei.openmusicplayer.ui.local.SongLibrary.SongLibFragment;
 import com.xiefei.openmusicplayer.ui.local.SongLibrary.filterSong.FilterFilterSongFragment;
 import com.xiefei.openmusicplayer.ui.online.songmenus.SongMenuListFragment;
@@ -36,15 +35,15 @@ import com.xiefei.openmusicplayer.ui.online.songmenus.info.SongMenuInfoFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import dalvik.system.PathClassLoader;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String Tag = "MainActivity";
     @BindView(R.id.navigation_view)
     public NavigationView navigationView;
     @BindView(R.id.drawer_layout)
     public DrawerLayout drawerLayout;
     @BindView(R.id.main_progressbar)
-    ProgressBar progressBar;
+    ProgressBar progress;
     @BindView(R.id.main_song_title)
     TextView songTitle;
     @BindView(R.id.main_song_article)
@@ -55,6 +54,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     ImageView nextButton;
     @BindView(R.id.play_bar)
     LinearLayout playBar;
+    @BindView(R.id.song_image)
+    ImageView songImage;
     private static final int PERMISSION_REQUEST_CODE = 0;
     private FragmentControl fragmentControl;
     private FragmentManager fragmentManager;
@@ -65,7 +66,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-
         ButterKnife.bind(this);
         fragmentControl = new FragmentControl(getSupportFragmentManager());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -193,6 +193,22 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        progressBar = null;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        progressBar = progress;
+//        progressBar.setMax((int) MusicServiceUtils.duration());
+//        progressBar.post(mUpdateCircularProgress);
+        isPause = !MusicServiceUtils.isPlaying();
+        freshPlayBar();
+    }
+
+    @Override
     protected void musicPause() {
         isPause = true;
         super.musicPause();
@@ -209,8 +225,40 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void freshPlay() {
         super.freshPlay();
+        freshPlayBar();
+    }
+
+    private void setPlayButton(){
+        if(isPause){
+            playButton.setImageResource(R.drawable.icon_music_play);
+        }else {
+            playButton.setImageResource(R.drawable.icon_music_pause);
+        }
+    }
+
+    @Override
+    protected void serviceConnected() {
+        super.serviceConnected();
+        freshPlayBar();
+        progressBar.setMax((int) MusicServiceUtils.duration());
+        progressBar.postDelayed(mUpdateCircularProgress, 10);
+    }
+
+    private void freshPlayBar() {
         songTitle.setText(MusicServiceUtils.getTrackName());
         songArtist.setText(MusicServiceUtils.getArtistName());
+        String image = MusicServiceUtils.getDescPic();
+        if(image!=null){
+//            Glide.with(getApplicationContext())
+//                    .load(OpenMusicPlayerUtils.getAlbumArtUri(data.getArtistId()))
+//                    .placeholder(R.mipmap.logo_icon)
+//                    .into((ImageView) holderHelper.getViewById(R.id.image));
+            Log.d(Tag,image);
+            Glide.with(getApplicationContext()).load(Uri.parse(image)).placeholder(R.drawable.logo_icon).into(songImage);
+        }
+        progressBar.setMax((int) MusicServiceUtils.duration());
+        progressBar.postDelayed(mUpdateCircularProgress, 10);
+        setPlayButton();
     }
 
     @Override

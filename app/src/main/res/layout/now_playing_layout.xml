@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:id="@+id/now_playing_content"
-    android:fitsSystemWindows="true"
     >
     <!--<com.xiefei.circularmusicprogressbar.CircularMusicProgressBar-->
         <!--android:layout_width="200dp"-->
@@ -17,9 +16,27 @@
         <!--app:progress_bar_color="@android:color/background_dark"-->
         <!--app:progress_bar_second_color="@android:color/holo_red_dark"-->
         <!--/>-->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:background="@drawable/gaosi"
+        android:id="@+id/blur_background"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#60000000"
+        />
     <RelativeLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        >
+    <RelativeLayout
+
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:layout_marginTop="8dp"
         android:id="@+id/toolbar">
         <TextView
             android:layout_width="wrap_content"
@@ -48,7 +65,7 @@
     <com.xiefei.openmusicplayer.ui.widget.SquareImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
+        android:scaleType='centerCrop'
         android:id="@+id/song_image"
         android:src="@drawable/navigation_view_background"
         android:layout_centerHorizontal="true"/>
@@ -118,3 +135,4 @@
 
     </LinearLayout>
 </RelativeLayout>
+    </merge>

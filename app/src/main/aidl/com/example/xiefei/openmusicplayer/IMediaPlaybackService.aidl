@@ -35,6 +35,7 @@ interface IMediaPlaybackService
     long seek(long pos);
     String getTrackName();
     String getAlbumName();
+    String getDescPic();
     long getAlbumId();
     String getArtistName();
     long getArtistId();
@@ -52,5 +53,6 @@ interface IMediaPlaybackService
     int getRepeatMode();
     int getMediaMountedCount();
     int getAudioSessionId();
+
 }
 

@@ -1,21 +1,21 @@
 package com.xiefei.openmusicplayer.service.helper;
 
 import android.content.Context;
-import android.net.Uri;
-import android.provider.MediaStore;
+import android.util.Log;
 
-import com.xiefei.openmusicplayer.service.MusicService;
+import com.xiefei.openmusicplayer.entity.MusicPlaybackTrack;
 import com.xiefei.openmusicplayer.service.ServiceMusicEntity;
 import com.xiefei.openmusicplayer.service.helper.handler.BaiduRequestHandler;
 import com.xiefei.openmusicplayer.service.helper.handler.LocalRequestHandler;
+import com.xiefei.openmusicplayer.utils.OpenMusicPlayerUtils;
 
 import java.lang.ref.WeakReference;
-import java.util.List;
 
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+
 
 /**
  * Created by xiefei on 16/8/14.
@@ -23,9 +23,9 @@ import rx.schedulers.Schedulers;
  */
 public class MusicHelper {
     //歌曲来源
-    public static final int local = 0;//本地音乐
+//    public static final int local = OpenMusicPlayerUtils.IdType.Location.mId;//本地音乐
 //    public static final int file = 0;//本地音乐
-    public static final int baidu_online = 1;//百度音乐接口
+//    public static final int baidu_online = OpenMusicPlayerUtils.IdType.Baidu.mId;//百度音乐接口
     private WeakReference<Context> reference;
     private final LocalRequestHandler localRequestHandler = new LocalRequestHandler();
     private final BaiduRequestHandler baiduRequestHandler = new BaiduRequestHandler();
@@ -34,9 +34,9 @@ public class MusicHelper {
             reference = new WeakReference<>(context);
     }
     private Observable<ServiceMusicEntity> musicEntityObservable;
-    public void getMessageById(String id, int onlineTag, final LoadMusicCallBack callBack){
+    public void getMessageById(MusicPlaybackTrack track, final LoadMusicCallBack callBack){
 //        if(musicEntityObservable!=null);
-        musicEntityObservable  = getEntityObservable(id, onlineTag);
+        musicEntityObservable  = getEntityObservable(track.mId, track.mSourceType);
         musicEntityObservable.observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
                 .subscribe(new Observer<ServiceMusicEntity>() {
                     @Override
@@ -57,14 +57,24 @@ public class MusicHelper {
                     }
         });
     }
+    public ServiceMusicEntity getMessageById(MusicPlaybackTrack track){
+//        if(musicEntityObservable!=null);
+        switch (track.mSourceType){
+            case Location:
+                return  localRequestHandler.getEntity(reference.get().getApplicationContext(),track.mId);
+            case Baidu:
+                return  baiduRequestHandler.getEntity(reference.get().getApplicationContext(),track.mId);
+        }
+        return null;
+    }
 
-    private Observable<ServiceMusicEntity> getEntityObservable(String id, int onlineTag) {
+    private Observable<ServiceMusicEntity> getEntityObservable(long id, OpenMusicPlayerUtils.IdType IdType) {
         Observable<ServiceMusicEntity> musicEntityObservable = null;
-        switch (onlineTag){
-            case local:
+        switch (IdType){
+            case Location:
                 musicEntityObservable = localRequestHandler.handleRequest(id,reference.get().getApplicationContext());
                 break;
-            case baidu_online:
+            case Baidu:
                 musicEntityObservable = baiduRequestHandler.handleRequest(id,reference.get().getApplicationContext());
                 break;
         }

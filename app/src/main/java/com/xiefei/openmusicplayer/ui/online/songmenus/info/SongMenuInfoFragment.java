@@ -21,6 +21,7 @@ import com.xiefei.openmusicplayer.entity.SongMenuInfo;
 import com.xiefei.openmusicplayer.service.helper.MusicHelper;
 import com.xiefei.openmusicplayer.ui.MainActivity;
 import com.xiefei.openmusicplayer.ui.widget.DividerItemDecoration;
+import com.xiefei.openmusicplayer.utils.OpenMusicPlayerUtils;
 
 import java.util.List;
 
@@ -104,14 +105,7 @@ public class SongMenuInfoFragment extends MvpBaseFragment<SongMenuInfoListPresen
 
     @Override
     public void onClick(View view, int position) {
-//        String url = adapter.getData(position).getSongUrl();
-//        if(url==null)
-//            Snackbar.make(view,"歌曲未获取到链接!",Snackbar.LENGTH_SHORT).setAction("ok",null);
-//        else {
-//            MusicServiceUtils.openFile(adapter.getData(position).getSong_id(),);
-//            MusicServiceUtils.play();
-//        }
-        MusicServiceUtils.setOnlinePlayList(adapter.getDatas(),position, MusicHelper.baidu_online);
+        MusicServiceUtils.setOnlinePlayList(adapter.getDatas(),position, OpenMusicPlayerUtils.IdType.Baidu.mId);
 
     }
 

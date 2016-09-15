@@ -19,6 +19,7 @@ import com.xiefei.openmusicplayer.entity.SongMenu;
 import com.xiefei.openmusicplayer.entity.SongMenuInfo;
 import com.xiefei.openmusicplayer.service.MusicService;
 import com.xiefei.openmusicplayer.service.helper.MusicHelper;
+import com.xiefei.openmusicplayer.utils.OpenMusicPlayerUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -114,6 +115,24 @@ public class MusicServiceUtils {
         }
         return null;
     }
+    public static String getDescPic() {
+        try {
+            if(mService!=null)
+                return mService.getDescPic();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static boolean isPlaying() {
+        try {
+            if(mService!=null)
+                return mService.isPlaying();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     public static long duration() {
         try {
@@ -124,6 +143,17 @@ public class MusicServiceUtils {
         }
         return 0;
     }
+
+    public static long position() {
+        try {
+            if(mService!=null)
+                return mService.position();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public static long seek(long seek) {
         try {
             if(mService!=null)
@@ -135,7 +165,7 @@ public class MusicServiceUtils {
     }
 
     public static void setPlayList(List<SongInfo> songInfos, int position){
-        setPlayList(songInfos,position, MusicHelper.local);
+        setPlayList(songInfos,position, OpenMusicPlayerUtils.IdType.Location.mId);
     }
 
     public static void setPlayList(List<SongInfo> songInfos, int position,int onlineTag){
@@ -197,10 +227,11 @@ public class MusicServiceUtils {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.d(Tag,service.toString());
-            if(callback!=null)
-                callback.onServiceConnected(name, service);
             if(mService==null)
                 mService = IMediaPlaybackService.Stub.asInterface(service);
+            if(callback!=null)
+                callback.onServiceConnected(name, service);
+
         }
 
         @Override

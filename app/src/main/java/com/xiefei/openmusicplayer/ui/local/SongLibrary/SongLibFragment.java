@@ -49,6 +49,11 @@ public class SongLibFragment extends BaseFragment {
     private OpenViewPager openViewPager;
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
     }
@@ -72,6 +77,7 @@ public class SongLibFragment extends BaseFragment {
         viewPager.setOffscreenPageLimit(TAB_COUNT);
         tabLayout.setupWithViewPager(viewPager);
     }
+
 
     @Override
     protected int getLayoutRes() {

@@ -22,8 +22,7 @@ public abstract class MvpBaseFragment<P extends MvpPresenter,V extends MvpView> 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if(presenter==null) 这个一个BUG 必须创建,因为一旦进入这个流程Context基本是会更新的.®
-
+//        if(presenter==null) //这个一个BUG 必须创建,因为一旦进入这个流程Context基本是会更新的.®
         setRetainInstance(isRetainInstance());
     }
 
@@ -63,7 +62,7 @@ public abstract class MvpBaseFragment<P extends MvpPresenter,V extends MvpView> 
     @Override
     public void onDetach() {
         isAttatch = false;
-        presenter.detachView(isRetainInstance());
+
         super.onDetach();
     }
     @Override
@@ -74,7 +73,7 @@ public abstract class MvpBaseFragment<P extends MvpPresenter,V extends MvpView> 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
+        presenter.detachView(isRetainInstance());
     }
 
     public abstract P createPresent();

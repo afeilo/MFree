@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -21,7 +20,6 @@ import com.xiefei.openmusicplayer.R;
 import com.xiefei.openmusicplayer.entity.SongInfo;
 import com.xiefei.openmusicplayer.ui.MainActivity;
 import com.xiefei.openmusicplayer.ui.widget.DividerItemDecoration;
-import com.xiefei.openmusicplayer.utils.MDStatusBarCompat;
 
 import java.util.List;
 
@@ -105,6 +103,11 @@ public class FilterFilterSongFragment extends MvpBaseFragment<FilterSongListPres
     public void onClick(View view, int position) {
         MusicServiceUtils.setPlayList(adapter.getDatas(),position);
 //        MusicServiceUtils.play();
+    }
+
+    @Override
+    protected void onVisible() {
+        super.onVisible();
 
     }
 

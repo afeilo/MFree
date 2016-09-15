@@ -3,12 +3,17 @@ package com.xiefei.openmusicplayer.ui.online.songmenus;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.Toast;
 
 import com.xiefei.mvpstructure.fragment.MvpBaseFragment;
 import com.xiefei.openmusicplayer.R;
@@ -29,12 +34,14 @@ public class SongMenuListFragment extends MvpBaseFragment<SongMenuListPresenter,
     RecyclerView recyclerView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    int position;
+    private final String RECYCLER_VIEW_POSITION="recycler_postion";
     private boolean isFirst = true;
     private SongMenuListAdapter adapter;
     private final int PAGE_SIZE = 20;
     private List<SongMenu.ContentBean> songMenuInfos;
     private MainActivity activity;
-
+    private GridLayoutManager gridLayoutManager;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -71,8 +78,17 @@ public class SongMenuListFragment extends MvpBaseFragment<SongMenuListPresenter,
     protected void initView(View contentView) {
         ButterKnife.bind(this,contentView);
         bindToolbar();
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+        gridLayoutManager = new GridLayoutManager(getContext(),2);
+        recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.addItemDecoration(new GradDividerItemDecoration(Color.TRANSPARENT,16,2));
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if(savedInstanceState!=null){
+            position = savedInstanceState.getInt(RECYCLER_VIEW_POSITION,0);
+        }
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -84,10 +100,17 @@ public class SongMenuListFragment extends MvpBaseFragment<SongMenuListPresenter,
             adapter.setOnItemClickListener(this);
             if(songMenuInfos == null)
                 presenter.getData(PAGE_SIZE,1);
-            else
+            else{
                 adapter.setDatas(songMenuInfos);
+                gridLayoutManager.scrollToPosition(position);
+            }
         }
         isFirst = false;
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
     }
 
     @Override
@@ -95,6 +118,9 @@ public class SongMenuListFragment extends MvpBaseFragment<SongMenuListPresenter,
         super.onSaveInstanceState(outState);
         if(isRetainInstance()&&adapter!=null)
             songMenuInfos = adapter.getDatas();
+        if(recyclerView!=null)
+            outState.putInt(RECYCLER_VIEW_POSITION,gridLayoutManager.findFirstVisibleItemPosition());
+
     }
     @Override
     public void showLoading(boolean isPullToRefresh) {
@@ -113,8 +139,10 @@ public class SongMenuListFragment extends MvpBaseFragment<SongMenuListPresenter,
 
     @Override
     public void setData(List<SongMenu.ContentBean> data) {
-        Log.d("song","size->"+data.size());
+        Log.d("song","size->"+data.size()+"--"+position);
         adapter.setDatas(data);
+        recyclerView.scrollToPosition(position);
+        gridLayoutManager.scrollToPosition(position);
     }
 
     @Override

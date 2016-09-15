@@ -9,8 +9,6 @@ public class ServiceMusicEntity {
     private String title;//音乐name
     private String album;//专辑名
     private String artist;//歌手
-    private long duration;//播放时间
-    private String lrcLink;//歌词链接
     private String descPic;//歌曲图片
     private String url;//歌曲播放地址
 
@@ -46,21 +44,6 @@ public class ServiceMusicEntity {
         this.artist = artist;
     }
 
-    public long getDuration() {
-        return duration;
-    }
-
-    public void setDuration(long duration) {
-        this.duration = duration;
-    }
-
-    public String getLrcLink() {
-        return lrcLink;
-    }
-
-    public void setLrcLink(String lrcLink) {
-        this.lrcLink = lrcLink;
-    }
 
     public String getDescPic() {
         return descPic;
